@@ -1,10 +1,13 @@
-import "./App.css";
+import { BrowserRouter } from "react-router-dom";
+import { AppRoutes } from "./routes";
+
 
 function App() {
-  return <div>
-    <div>Hello, Vite + React!</div>
-    {/* <div><Button variant="default" >Click me</Button></div> */}
-  </div>;
+  return (
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+  );
 }
 
 export default App;
