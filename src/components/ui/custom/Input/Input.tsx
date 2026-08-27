@@ -20,7 +20,7 @@ const Input = ({
     <div className="space-y-1.5">
       <div
         className={cn(
-          "flex w-full items-center gap-2 rounded-md border px-3 py-1 transition-colors focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50",
+          "flex w-full items-center gap-2 rounded-md border px-3 py-1 transition-colors focus-within:border-purple-300 focus-within:ring-3 focus-within:ring-purple-300/50",
           error &&
             "border-red-500 focus-within:border-red-500 focus-within:ring-red-500/20",
         )}
@@ -34,7 +34,7 @@ const Input = ({
           togglePasswordVisibility={togglePasswordVisibility}
         />
       </div>
-      {helperText && (
+      {error && (
         <p
           className={cn(
             "px-1 text-xs text-muted-foreground",

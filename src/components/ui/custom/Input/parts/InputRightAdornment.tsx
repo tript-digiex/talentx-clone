@@ -17,6 +17,7 @@ export const InputRightAdornment = ({
   if (isPasswordInput)
     return (
       <button
+        type="button"
         className="flex size-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none cursor-pointer"
         onClick={togglePasswordVisibility}
       >
