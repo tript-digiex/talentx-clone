@@ -1,49 +1,7 @@
-import {
-  BriefcaseBusiness,
-  LogOut,
-  Settings,
-  Store,
-  UsersRound,
-} from "lucide-react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
-import { Button, buttonVariants } from "@/components/ui/shadcn/button";
-import { cn } from "@/lib/utils";
-import { useAuthStore } from "@/stores/auth.store";
-
-const navigationItems = [
-  {
-    label: "Talents",
-    href: "/talents",
-    icon: UsersRound,
-  },
-  {
-    label: "Clients",
-    href: "/clients",
-    icon: BriefcaseBusiness,
-  },
-  {
-    label: "Resellers",
-    href: "/resellers",
-    icon: Store,
-  },
-  {
-    label: "Settings",
-    href: "/settings",
-    icon: Settings,
-  },
-];
 
 export function AppLayout() {
-  const user = useAuthStore((state) => state.user);
-  const logout = useAuthStore((state) => state.logout);
-  const navigate = useNavigate();
-
-  function handleLogout() {
-    logout();
-    navigate("/login", { replace: true });
-  }
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* <aside className="fixed inset-y-0 left-0 z-10 flex w-64 flex-col border-r border-sidebar-border bg-sidebar px-3 py-4 text-sidebar-foreground">

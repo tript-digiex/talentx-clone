@@ -1,52 +1,24 @@
-import { type FormEvent } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import logo from "@/assets/images/DGX-Logo-Text.png";
 
-import { Button } from "@/components/ui/shadcn/button";
 import { useAuthStore } from "@/stores/auth.store";
-
-type LocationState = {
-  from?: {
-    pathname?: string;
-  };
-};
+import LoginForm from "@/features/auth/components/LoginForm";
 
 export function LoginPage() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const login = useAuthStore((state) => state.login);
-  const location = useLocation();
-  const navigate = useNavigate();
-  const from =
-    (location.state as LocationState | null)?.from?.pathname || "/talents";
 
   if (isAuthenticated) {
     return <Navigate to="/talents" replace />;
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-    const email = String(formData.get("email") || "").trim();
-    const name = String(formData.get("name") || "").trim();
-
-    login({
-      email: email || "admin@talentx.local",
-      name,
-    });
-    navigate(from, { replace: true });
-  }
-
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background px-4">
-      <section className="w-full max-w-sm rounded-lg border border-border bg-card p-6 text-card-foreground shadow-sm">
-        <div className="mb-6">
-          <h1 className="text-2xl font-semibold tracking-tight">TalentX</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Use mock login to access the dashboard.
-          </p>
+    <main className="flex min-h-screen items-center justify-center bg-[#F9FAFB] px-4">
+      <section className="w-full max-w-md rounded-lg p-6 bg-white flex flex-col gap-6">
+        <div className="h-8 flex items-center justify-center">
+          <img src={logo} alt="TalentX Logo" className="h-full" />
         </div>
 
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        {/* <form className="space-y-4" onSubmit={handleSubmit}>
           <label className="block space-y-2">
             <span className="text-sm font-medium">Name</span>
             <input
@@ -70,7 +42,9 @@ export function LoginPage() {
           <Button className="w-full" type="submit">
             Login
           </Button>
-        </form>
+        </form> */}
+
+        <LoginForm />
       </section>
     </main>
   );

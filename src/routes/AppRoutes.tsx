@@ -5,7 +5,7 @@ import { ProtectedRoute } from "@/routes/ProtectedRoute";
 import { PUBLIC_ROUTES, SIDEBARRED_ROUTES } from "@/routes/route-config";
 import { renderRoute } from "@/routes/render-route";
 import { AppLayout } from "@/layouts/AppLayout";
-import { SpinnerLoader } from "@/components/ui/custom/SpinnerLoader";
+import { SpinnerLoader } from "@/components/common/SpinnerLoader";
 
 export function AppRoutes() {
   return (
