@@ -1,12 +1,13 @@
-import { BrowserRouter } from "react-router-dom";
 import { AppRoutes } from "./routes";
-
+import { QueryProvider } from "./providers/QueryProvider";
+import { Toaster } from "sonner";
 
 function App() {
   return (
-    <BrowserRouter>
+    <QueryProvider>
       <AppRoutes />
-    </BrowserRouter>
+      <Toaster position="top-right" richColors />
+    </QueryProvider>
   );
 }
 
