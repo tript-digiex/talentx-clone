@@ -7,6 +7,7 @@ const Button = ({
   leftIcon,
   rightIcon,
   loading = false,
+  active = false,
   fullWidth = false,
   disabled,
   className,
@@ -17,6 +18,7 @@ const Button = ({
     <ButtonShadcn
       className={className}
       disabled={disabled || loading}
+      active={active}
       {...props}
     >
       {leftIcon}
