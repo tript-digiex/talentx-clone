@@ -1,5 +1,9 @@
+import {
+  clearAuthStorage,
+  hasValidAuthSession,
+  persistAuthSession,
+} from "@/features/auth/utils/auth.utils";
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
 
 export type AuthUser = {
   id: string;
@@ -15,42 +19,25 @@ export type AuthUser = {
 type AuthState = {
   user: AuthUser | null;
   isAuthenticated: boolean;
-  login: (input: { email: string; name?: string }) => void;
-  logout: () => void;
+  setSession: (input: { jwtToken: string; expirationTime: number }) => void;
+  clearSession: () => void;
 };
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
+export const useAuthStore = create<AuthState>()((set) => ({
+  user: null,
+  isAuthenticated: hasValidAuthSession(),
+  setSession: ({ jwtToken, expirationTime }) => {
+    persistAuthSession({ jwtToken, expirationTime });
+
+    set({
+      isAuthenticated: true,
+    });
+  },
+  clearSession: () => {
+    set({
       user: null,
       isAuthenticated: false,
-      login: ({ email, name }) =>
-        set({
-          user: {
-            id: "mock-user",
-            email,
-            role: "admin",
-            userType: "admin",
-            firstName: name?.trim() || email.split("@")[0] || "Admin",
-            lastName: "",
-            isOnBoarded: true,
-            permissions: [],
-          },
-          isAuthenticated: true,
-        }),
-      logout: () =>
-        set({
-          user: null,
-          isAuthenticated: false,
-        }),
-    }),
-    {
-      name: "talentx-auth",
-      storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({
-        user: state.user,
-        isAuthenticated: state.isAuthenticated,
-      }),
-    },
-  ),
-);
+    });
+    clearAuthStorage();
+  },
+}));

@@ -6,7 +6,12 @@ import { Controller, useForm } from "react-hook-form";
 import { loginFormSchema } from "../schemas/auth.schema";
 import type { LoginFormType } from "../types/auth.types";
 
-const LoginForm = () => {
+type LoginFormProps = {
+  onSubmit: (data: LoginFormType) => Promise<void> | void;
+  isSubmitting?: boolean;
+};
+
+const LoginForm = ({ onSubmit, isSubmitting = false }: LoginFormProps) => {
   const {
     register,
     handleSubmit,
@@ -21,10 +26,6 @@ const LoginForm = () => {
     },
     mode: "onSubmit",
   });
-
-  const onSubmit = (data: LoginFormType) => {
-    console.log(data);
-  };
 
   return (
     <form
@@ -71,7 +72,7 @@ const LoginForm = () => {
         </Button>
       </div>
 
-      <Button className="w-full" type="submit" size="lg">
+      <Button className="w-full" type="submit" size="lg" loading={isSubmitting}>
         Sign in
       </Button>
     </form>

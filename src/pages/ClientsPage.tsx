@@ -1,4 +1,5 @@
 export function ClientsPage() {
+  
   return (
     <section>
       <h1 className="text-2xl font-semibold tracking-tight">Clients</h1>

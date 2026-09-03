@@ -1,14 +1,37 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
 import logo from "@/assets/images/DGX-Logo-Text.png";
 
 import { useAuthStore } from "@/stores/auth.store";
 import LoginForm from "@/features/auth/components/LoginForm";
+import { useLogin } from "@/features/auth/hooks/useLogin";
+import type { LoginFormType } from "@/features/auth/types/auth.types";
+import {
+  getRedirectPath,
+  hasValidAuthSession,
+} from "@/features/auth/utils/auth.utils";
 
 export function LoginPage() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const [searchParams] = useSearchParams();
+  const loginMutation = useLogin();
 
-  if (isAuthenticated) {
-    return <Navigate to="/talents" replace />;
+  const redirectPath = getRedirectPath(searchParams);
+
+  const handleLoginSubmit = async (data: LoginFormType) => {
+    try {
+      await loginMutation.mutateAsync(data);
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Login failed. Please try again.",
+      );
+    }
+  };
+
+  if (isAuthenticated && hasValidAuthSession()) {
+    return <Navigate to={redirectPath} replace />;
   }
 
   return (
@@ -18,7 +41,10 @@ export function LoginPage() {
           <img src={logo} alt="TalentX Logo" className="h-full" />
         </div>
 
-        <LoginForm />
+        <LoginForm
+          isSubmitting={loginMutation.isPending}
+          onSubmit={handleLoginSubmit}
+        />
       </section>
     </main>
   );
