@@ -1,10 +1,10 @@
 import Input from "@/components/ui/custom/Input";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { loginFormSchema } from "../schemas/auth.schema";
+import Button from "@/components/ui/custom/Button";
 import { Checkbox as CheckboxShadcn } from "@/components/ui/shadcn/checkbox";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { loginFormSchema } from "../schemas/auth.schema";
 import type { LoginFormType } from "../types/auth.types";
-import { Button } from "@/components/ui/shadcn/button";
 
 const LoginForm = () => {
   const {
@@ -28,7 +28,7 @@ const LoginForm = () => {
 
   return (
     <form
-      className="flex flex-col max-w-full gap-4"
+      className="flex max-w-full flex-col gap-4"
       onSubmit={handleSubmit(onSubmit)}
     >
       <Input
@@ -38,13 +38,15 @@ const LoginForm = () => {
         error={!!formErrors.email}
         helperText={formErrors.email?.message}
       />
+
       <Input
-        placeholder="••••••••"
+        placeholder="Enter your password"
         type="password"
         {...register("password")}
         error={!!formErrors.password}
         helperText={formErrors.password?.message}
       />
+
       <div className="flex items-center justify-between">
         <Controller
           name="rememberMe"
@@ -63,9 +65,13 @@ const LoginForm = () => {
             </div>
           )}
         />
+
+        <Button type="button" size="sm" variant="link">
+          Forgot password
+        </Button>
       </div>
 
-      <Button type="submit" variant="outline" size="lg">
+      <Button className="w-full" type="submit" size="lg">
         Sign in
       </Button>
     </form>
