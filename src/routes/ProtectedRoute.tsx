@@ -8,7 +8,7 @@ export function ProtectedRoute() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const clearSession = useAuthStore((state) => state.clearSession);
   const location = useLocation();
-  
+
   const hasValidSession = isAuthenticated && hasValidAuthSession();
 
   useEffect(() => {
