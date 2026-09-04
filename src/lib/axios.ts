@@ -12,7 +12,7 @@ apiClient.interceptors.request.use((config) => {
   const token = getAuthToken();
 
   if (token) {
-    config.headers["Auth-Token"] = token;
+    config.headers["Auth-Token"] = `Bearer ${token}`;
   }
 
   return config;
@@ -43,3 +43,14 @@ const handleInvalidSession = () => {
 };
 
 export type ApiRequestConfig = InternalAxiosRequestConfig;
+
+export type ApiError = {
+  code: string;
+  message: string;
+};
+
+export type ApiResponse<T> = {
+  success: boolean;
+  data?: T;
+  error?: ApiError;
+};

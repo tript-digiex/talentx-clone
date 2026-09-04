@@ -5,5 +5,4 @@ export interface ButtonProps extends ComponentProps<typeof ButtonShadcn> {
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   loading?: boolean;
-  fullWidth?: boolean;
 }

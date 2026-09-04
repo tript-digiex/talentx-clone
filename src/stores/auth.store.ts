@@ -1,25 +1,17 @@
+import type { AuthUser } from "@/features/auth/types/auth.types";
 import {
   clearAuthStorage,
   hasValidAuthSession,
   persistAuthSession,
 } from "@/features/auth/utils/auth.utils";
+import { queryClient } from "@/lib/query-client";
 import { create } from "zustand";
-
-export type AuthUser = {
-  id: string;
-  email: string;
-  role: string;
-  userType: string;
-  firstName: string;
-  lastName: string;
-  isOnBoarded: boolean;
-  permissions: string[];
-};
 
 type AuthState = {
   user: AuthUser | null;
   isAuthenticated: boolean;
   setSession: (input: { jwtToken: string; expirationTime: number }) => void;
+  setUser: (user: AuthUser) => void;
   clearSession: () => void;
 };
 
@@ -33,11 +25,15 @@ export const useAuthStore = create<AuthState>()((set) => ({
       isAuthenticated: true,
     });
   },
+  setUser: (user) => {
+    set({ user });
+  },
   clearSession: () => {
     set({
       user: null,
       isAuthenticated: false,
     });
+    queryClient.clear();
     clearAuthStorage();
   },
 }));

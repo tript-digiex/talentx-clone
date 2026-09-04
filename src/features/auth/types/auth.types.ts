@@ -1,8 +1,20 @@
 import type z from "zod";
 import type { loginFormSchema } from "../schemas/auth.schema";
 import type { USER_TYPE } from "./auth.constants";
+import type { ApiResponse } from "@/lib/axios";
 
 export type LoginFormType = z.infer<typeof loginFormSchema>;
+
+export type AuthUser = {
+  id: string;
+  email: string;
+  role: string;
+  user_type: string;
+  first_name: string;
+  last_name: string;
+  is_on_boarded: boolean;
+  permissions: string[];
+};
 
 export type AuthSession = {
   jwtToken: string;
@@ -17,14 +29,9 @@ export type LoginPayload = {
   user_type: USER_TYPE;
 };
 
-export type LoginResponse = {
-  success: boolean;
-  data?: {
-    jwt_token: string;
-    expiration_time: number;
-  };
-  error?: {
-    code: string;
-    message: string;
-  };
-};
+export type LoginResponse = ApiResponse<{
+  jwt_token: string;
+  expiration_time: number;
+}>;
+
+export type AuthInfoResponse = ApiResponse<AuthUser>;

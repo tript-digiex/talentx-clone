@@ -8,12 +8,10 @@ const Button = ({
   rightIcon,
   loading = false,
   active = false,
-  fullWidth = false,
   disabled,
   className,
   ...props
 }: ButtonProps) => {
-  
   return (
     <ButtonShadcn
       className={className}
