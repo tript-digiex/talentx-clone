@@ -1,7 +1,9 @@
 import { useAuthStore } from "@/stores/auth.store";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
 import { loginApi } from "../api/auth.api";
+import type { LoginResponse } from "../types/auth.types";
 import { getRedirectPath } from "../utils/auth.utils";
 
 export const useLogin = () => {
@@ -13,7 +15,14 @@ export const useLogin = () => {
 
   return useMutation({
     mutationFn: loginApi,
-    onSuccess: (session) => {
+    onSuccess: (response: LoginResponse) => {
+      if (!response.success) {
+        toast.error(response.error.message);
+        return;
+      }
+
+      const session = response.data;
+
       setSession({
         jwtToken: session.jwt_token,
         expirationTime: session.expiration_time,
@@ -21,8 +30,8 @@ export const useLogin = () => {
 
       navigate(redirectPath, { replace: true });
     },
-    onError: (error) => {
-      console.error("Login failed:", error);
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 };

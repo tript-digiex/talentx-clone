@@ -11,7 +11,9 @@ import type {
 import { BASE_AUTH_PAYLOAD } from "../types/auth.constants";
 import { apiClient } from "@/lib/axios";
 
-export const loginApi = async (input: LoginFormType) => {
+export const loginApi = async (
+  input: LoginFormType,
+): Promise<LoginResponse> => {
   const payload: LoginPayload = {
     ...BASE_AUTH_PAYLOAD,
     email: input.email,
@@ -23,47 +25,19 @@ export const loginApi = async (input: LoginFormType) => {
     "/v1/auth/login",
     payload,
   );
-  
-  if (!response) {
-    throw new Error("Login failed. Please try again.");
-  }
 
-  const data = response.data;
-
-  if (!data.success) {
-    throw new Error(data.error?.message ?? "Login failed. Please try again.");
-  }
-
-  if (!data.data) {
-    throw new Error("Login failed. Please try again.");
-  }
-
-  return data.data;
+  return response.data;
 };
 
-export const getAuthInfoApi = async () => {
+export const getAuthInfoApi = async (): Promise<AuthInfoResponse> => {
   const response = await apiClient.get<AuthInfoResponse>("/v1/auth/info");
 
-  if (!response) {
-    throw new Error("Could not get user info. Please try again.");
-  }
-
-  const data = response.data;
-
-  if (!data.success) {
-    throw new Error(
-      data.error?.message ?? "Could not get user info. Please try again.",
-    );
-  }
-
-  if (!data.data) {
-    throw new Error("Could not get user info. Please try again.");
-  }
-
-  return data.data;
+  return response.data;
 };
 
-export const forgotPasswordApi = async (input: ForgotPasswordFormType) => {
+export const forgotPasswordApi = async (
+  input: ForgotPasswordFormType,
+): Promise<ForgotPasswordResponse> => {
   const payload: ForgotPasswordPayload = {
     ...BASE_AUTH_PAYLOAD,
     email: input.email,
@@ -74,17 +48,5 @@ export const forgotPasswordApi = async (input: ForgotPasswordFormType) => {
     payload,
   );
 
-  if (!response) {
-    throw new Error("Could not reset password. Please try again.");
-  }
-
-  const data = response.data;
-
-  if (!data.success) {
-    throw new Error(
-      data.error?.message ?? "Could not get user email. Please try again.",
-    );
-  }
-
-  return data;
+  return response.data;
 };

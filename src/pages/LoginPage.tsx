@@ -1,5 +1,4 @@
 import { Navigate, useSearchParams } from "react-router-dom";
-import { toast } from "sonner";
 import logo from "@/assets/images/DGX-Logo-Text.png";
 
 import { useAuthStore } from "@/stores/auth.store";
@@ -18,16 +17,8 @@ export function LoginPage() {
 
   const redirectPath = getRedirectPath(searchParams);
 
-  const handleLoginSubmit = async (data: LoginFormType) => {
-    try {
-      await loginMutation.mutateAsync(data);
-    } catch (error) {
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "Login failed. Please try again.",
-      );
-    }
+  const handleLoginSubmit = (data: LoginFormType) => {
+    loginMutation.mutate(data);
   };
 
   if (isAuthenticated && hasValidAuthSession()) {

@@ -18,21 +18,24 @@ export const useAuthInfo = (enabled = true) => {
     retry: false,
   });
 
-  useEffect(() => {
-    if (query.data) {
-      setUser(query.data);
-    }
-  }, [query.data]);
+  const user = query.data?.success ? query.data.data : null;
 
-  const fullName = [query.data?.first_name, query.data?.last_name]
+  useEffect(() => {
+    if (user) {
+      setUser(user);
+    }
+  }, [setUser, user]);
+
+  const fullName = [user?.first_name, user?.last_name]
     .filter(Boolean)
     .join(" ")
     .trim();
-  const displayName = fullName || query.data?.email || "User";
+
+  const displayName = fullName || user?.email || "User";
 
   return {
     ...query,
-    user: query.data,
-    displayName
+    user,
+    displayName,
   };
 };
