@@ -45,7 +45,7 @@ export type AuthInfoResponse = ApiResponse<AuthUser>;
 export type ForgotPasswordFormType = z.infer<typeof forgotPasswordFormSchema>;
 
 export type ForgotPasswordPayload = BaseAuthPayload & {
-  email: string;
+  user_email: string;
 };
 
 export type ForgotPasswordResponse = ApiResponse<null>;

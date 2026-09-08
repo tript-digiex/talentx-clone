@@ -7,5 +7,5 @@ export const loginFormSchema = z.object({
 });
 
 export const forgotPasswordFormSchema = z.object({
-  email: z.string().min(1, "Email is required").email("Invalid email address"),
+  user_email: z.string().min(1, "Email is required").email("Invalid email address"),
 });

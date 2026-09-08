@@ -40,7 +40,7 @@ export const forgotPasswordApi = async (
 ): Promise<ForgotPasswordResponse> => {
   const payload: ForgotPasswordPayload = {
     ...BASE_AUTH_PAYLOAD,
-    email: input.email,
+    user_email: input.user_email,
   };
 
   const response = await apiClient.post<ForgotPasswordResponse>(

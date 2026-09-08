@@ -74,7 +74,7 @@ const LoginForm = ({ onSubmit, isSubmitting = false }: LoginFormProps) => {
           type="button"
           size="sm"
           variant="link"
-          onClick={() => navigate("/forgot-password")}
+          onClick={() => navigate("/forgotPassword")}
         >
           Forgot password
         </Button>

@@ -2,10 +2,10 @@ import {
   ClientsPage,
   DashboardPage,
   EvaluationsPage,
+  ForgotPasswordCompletedPage,
   ForgotPasswordPage,
   GroupManagementPage,
   HiringRequestsPage,
-  LoginPage,
   PartnersPage,
   ResellersPage,
   SettingsPage,
@@ -14,15 +14,20 @@ import {
 } from "@/routes/lazy-imports";
 
 import type { AppRouteConfig } from "./types";
+import { LoginPage } from "@/pages/public/LoginPage";
 
 export const PUBLIC_ROUTES: AppRouteConfig[] = [
   {
     path: "/login",
     element: LoginPage,
-  },  
+  },
   {
-    path: "/forgot-password",
+    path: "/forgotPassword",
     element: ForgotPasswordPage,
+  },
+  {
+    path: "/forgotPasswordCompleted",
+    element: ForgotPasswordCompletedPage,
   },
 ];
 
