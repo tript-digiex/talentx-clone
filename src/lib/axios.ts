@@ -25,6 +25,17 @@ export type ApiErrorResponse = {
 
 export type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
 
+export type ApiListData<T> = {
+  content: T[];
+  total_elements: number;
+  number_of_elements: number;
+  page_size: number;
+  page_number: number;
+  total_pages: number;
+};
+
+export type ApiListResponse<T> = ApiResponse<ApiListData<T>>;
+
 const DEFAULT_API_ERROR_MESSAGE = "Something went wrong. Please try again.";
 const UNKNOWN_API_ERROR_CODE = "UNKNOWN_ERROR";
 
