@@ -6,6 +6,7 @@ import { InputLeftAdornment } from "./parts/InputLeftAdornment";
 import { InputRightAdornment } from "./parts/InputRightAdornment";
 
 const Input = ({
+  label,
   leftIcon,
   rightIcon,
   error,
@@ -18,6 +19,12 @@ const Input = ({
 
   return (
     <div className="space-y-1.5">
+      {label && (
+        <label className="block px-1 text-sm font-medium text-slate-700">
+          {label} {props.required && <span className="text-red-500">*</span>}
+        </label>
+      )}
+
       <div
         className={cn(
           "flex w-full items-center gap-2 rounded-md border px-3 py-1 transition-colors focus-within:border-purple-300 focus-within:ring-3 focus-within:ring-purple-300/50",
@@ -26,7 +33,11 @@ const Input = ({
         )}
       >
         <InputLeftAdornment leftIcon={leftIcon} type={type} />
-        <InputShadcn {...props} type={inputType} className="flex-1" />
+        <InputShadcn
+          {...props}
+          type={inputType}
+          className="flex-1 placeholder:text-slate-400"
+        />
         <InputRightAdornment
           isPasswordInput={isPasswordInput}
           PasswordIcon={PasswordIcon}
