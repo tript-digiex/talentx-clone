@@ -2,6 +2,7 @@ import {
   ClientsPage,
   DashboardPage,
   EvaluationsPage,
+  ForgotPasswordPage,
   GroupManagementPage,
   HiringRequestsPage,
   LoginPage,
@@ -18,6 +19,10 @@ export const PUBLIC_ROUTES: AppRouteConfig[] = [
   {
     path: "/login",
     element: LoginPage,
+  },  
+  {
+    path: "/forgot-password",
+    element: ForgotPasswordPage,
   },
 ];
 

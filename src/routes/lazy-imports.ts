@@ -5,6 +5,11 @@ export const LoginPage = lazy(async () => {
   return { default: module.LoginPage };
 });
 
+export const ForgotPasswordPage = lazy(async () => {
+  const module = await import("@/pages/ForgotPasswordPage");
+  return { default: module.ForgotPasswordPage };
+});
+
 export const DashboardPage = lazy(async () => {
   const module = await import("@/pages/DashboardPage");
   return { default: module.DashboardPage };

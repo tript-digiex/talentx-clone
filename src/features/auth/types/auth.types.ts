@@ -1,7 +1,15 @@
 import type z from "zod";
-import type { loginFormSchema } from "../schemas/auth.schema";
+import type {
+  forgotPasswordFormSchema,
+  loginFormSchema,
+} from "../schemas/auth.schema";
 import type { USER_TYPE } from "./auth.constants";
 import type { ApiResponse } from "@/lib/axios";
+
+export type BaseAuthPayload = {
+  domain: string;
+  user_type: USER_TYPE;
+};
 
 export type LoginFormType = z.infer<typeof loginFormSchema>;
 
@@ -21,12 +29,10 @@ export type AuthSession = {
   expirationTime: number;
 };
 
-export type LoginPayload = {
-  domain: string;
+export type LoginPayload = BaseAuthPayload & {
   email: string;
   keep_login: boolean;
   password_hash: string;
-  user_type: USER_TYPE;
 };
 
 export type LoginResponse = ApiResponse<{
@@ -35,3 +41,11 @@ export type LoginResponse = ApiResponse<{
 }>;
 
 export type AuthInfoResponse = ApiResponse<AuthUser>;
+
+export type ForgotPasswordFormType = z.infer<typeof forgotPasswordFormSchema>;
+
+export type ForgotPasswordPayload = BaseAuthPayload & {
+  email: string;
+};
+
+export type ForgotPasswordResponse = ApiResponse<null>;

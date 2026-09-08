@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { loginFormSchema } from "../schemas/auth.schema";
 import type { LoginFormType } from "../types/auth.types";
+import { useNavigate } from "react-router-dom";
 
 type LoginFormProps = {
   onSubmit: (data: LoginFormType) => Promise<void> | void;
@@ -12,6 +13,8 @@ type LoginFormProps = {
 };
 
 const LoginForm = ({ onSubmit, isSubmitting = false }: LoginFormProps) => {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -67,7 +70,12 @@ const LoginForm = ({ onSubmit, isSubmitting = false }: LoginFormProps) => {
           )}
         />
 
-        <Button type="button" size="sm" variant="link">
+        <Button
+          type="button"
+          size="sm"
+          variant="link"
+          onClick={() => navigate("/forgot-password")}
+        >
           Forgot password
         </Button>
       </div>
