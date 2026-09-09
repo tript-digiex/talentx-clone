@@ -1,0 +1,11 @@
+export enum USER_ROLES {
+    ADMIN = "ADMIN",
+    ADMIN_MEMBER = "ADMIN_MEMBER",
+}
+
+export enum USER_STATUS {
+    ACTIVE = "ACTIVE",
+    PENDING = "PENDING",
+}
+
+export const DEFAULT_USER_MANAGEMENT_PAGE_SIZE = 30;
