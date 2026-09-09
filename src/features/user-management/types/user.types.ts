@@ -30,6 +30,8 @@ export const userKeys = {
     pageNumber: number = DEFAULT_PAGE_NUMBER,
     pageSize: number = DEFAULT_USER_MANAGEMENT_PAGE_SIZE,
   ) => [...userKeys.all, "list", { pageNumber, pageSize }] as const,
+  detail: (userId: string | null) =>
+    [...userKeys.all, "detail", userId] as const,
 };
 
 export type UserListResponse = ApiListResponse<UserItemResponse>;
@@ -47,8 +49,22 @@ export type GROUP_MEMBER_LIST_DATA = {
   created_date: Date;
 };
 
+export type UserDetailResponseData = UserItemResponse & {
+  group_member?: GROUP_MEMBER_LIST_DATA | null;
+};
+
 export type GROUP_MEMBER_RESPONSE = ApiResponse<GROUP_MEMBER_LIST_DATA[]>;
 
 export type CreateUserPayload = z.infer<typeof createUserSchema>;
 
+export type UpdateUserPayload = CreateUserPayload;
+
 export type UserResponse = ApiResponse<UserItemResponse>;
+
+export type UserDetailResponse = ApiResponse<UserDetailResponseData>;
+
+export type UpdateUserResponse = ApiResponse<
+  Omit<UserItemResponse, "user_code"> & {
+    group_member_id?: string;
+  }
+>;
