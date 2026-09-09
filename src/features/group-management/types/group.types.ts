@@ -20,7 +20,7 @@ export type GroupItemResponse = {
 };
 
 export type GroupItemDetailResponse = GroupItemResponse & {
-  module_access: GroupPermissionListResponse[];
+  module_access?: GroupPermissionListResponse[];
 };
 
 export type GroupManagementListPagination = Omit<
@@ -35,3 +35,4 @@ export type GroupPermissionResponse = ApiResponse<
 export type CreateGroupPayload = z.infer<typeof createGroupSchema>;
 
 export type CreateGroupResponse = ApiResponse<GroupItemDetailResponse>;
+export type GroupDetailResponse = ApiResponse<GroupItemDetailResponse>;

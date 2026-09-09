@@ -4,7 +4,7 @@ import { PenLine } from "lucide-react";
 
 type GroupListItemProps = {
   group: GroupItemResponse;
-  onEdit?: (group: GroupItemResponse) => void;
+  onEdit?: (groupId: string) => void;
 };
 
 export const GroupListItem = ({ group, onEdit }: GroupListItemProps) => {
@@ -15,7 +15,7 @@ export const GroupListItem = ({ group, onEdit }: GroupListItemProps) => {
         variant="secondary"
         size="icon-lg"
         leftIcon={<PenLine />}
-        onClick={() => onEdit && onEdit(group)}
+        onClick={() => onEdit?.(group.id)}
       />
     </div>
   );

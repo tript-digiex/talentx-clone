@@ -7,6 +7,7 @@ import {
 import type {
   CreateGroupPayload,
   CreateGroupResponse,
+  GroupDetailResponse,
   GroupItemResponse,
   GroupPermissionResponse,
 } from "../types/group.types";
@@ -57,5 +58,10 @@ export const createGroupApi = async (data: CreateGroupPayload): Promise<CreateGr
     payload,
   );
   
+  return response.data;
+}
+
+export const getGroupDetailApi = async (groupId: string): Promise<GroupDetailResponse> => {
+  const response = await apiClient.get<GroupDetailResponse>(`/v1/group-member/${groupId}`)
   return response.data;
 }

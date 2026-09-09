@@ -1,3 +1,6 @@
+import { MODAL_MODE } from "@/types/modal.constants";
+import type { CreateGroupPayload } from "./group.types";
+
 export enum GROUP_TYPES {
   ADMIN_MEMBER = "ADMIN_MEMBER",
 }
@@ -15,6 +18,13 @@ export const groupKeys = {
   list: (pageNumber: number = DEFAULT_GROUP_MANAGEMENT_PAGE_NUMBER, pageSize: number = DEFAULT_GROUP_MANAGEMENT_PAGE_SIZE) =>
     [...groupKeys.all, "list", { pageNumber, pageSize }] as const,
   permissions: () => [...groupKeys.all, "permissions"] as const,
+  detail: (groupId: string | null) => [...groupKeys.all, "detail", groupId] as const,
+};
+
+export const DEFAULT_GROUP_FORM_VALUES: CreateGroupPayload = {
+  name: "",
+  description: "",
+  permissions: [],
 };
 
 export const NAME_PERMISSION_LABELS: Record<string, string> = {
@@ -76,3 +86,19 @@ export const PERMISSION_LABELS: Record<string, string> = {
   DASHBOARD_CLIENT: "Client Dashboard",
   DASHBOARD_JOB: "Job Dashboard",
 };
+
+export const GROUP_MODAL_MODE_CONFIG = {
+  [MODAL_MODE.ADD]: {
+    title: "Add Group",
+    description:
+      "Create a new user group and assign permissions for shared access.",
+    submitButton: "Add",
+  },
+
+  [MODAL_MODE.EDIT]: {
+    title: "Edit Group",
+    description:
+      "Modify group details and adjust permissions for shared access.",
+    submitButton: "Save",
+  },
+} as const;

@@ -8,13 +8,14 @@ import Textarea from "@/components/ui/custom/Textarea";
 import { GroupListItem } from "@/features/group-management/components/GroupListItem";
 import { GroupPermissionsAccess } from "@/features/group-management/components/GroupPermissionsAccess";
 import { useGroupManagementList } from "@/features/group-management/hooks/useGroupManagementList";
-import { DEFAULT_GROUP_MANAGEMENT_PAGE_SIZE } from "@/features/group-management/types/group.constants";
-import type {
-  CreateGroupPayload,
-  GroupItemResponse,
-} from "@/features/group-management/types/group.types";
+import {
+  DEFAULT_GROUP_FORM_VALUES,
+  DEFAULT_GROUP_MANAGEMENT_PAGE_SIZE,
+  GROUP_MODAL_MODE_CONFIG,
+} from "@/features/group-management/types/group.constants";
+import type { CreateGroupPayload } from "@/features/group-management/types/group.types";
 import { ClipboardList, PlusIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MODAL_MODE } from "@/types/modal.constants";
 import { useGroupPermission } from "@/features/group-management/hooks/useGroupPermission";
 import { useCreateGroup } from "@/features/group-management/hooks/useCreateGroup";
@@ -22,18 +23,24 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createGroupSchema } from "@/features/group-management/schemas/group.schema";
 import { toast } from "sonner";
+import { useGetGroupDetail } from "@/features/group-management/hooks/useGetGroupDetail";
 
 export function GroupManagementPage() {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize] = useState(DEFAULT_GROUP_MANAGEMENT_PAGE_SIZE);
   const [modalMode, setModalMode] = useState<MODAL_MODE | null>(null);
-  const [selectedGroup, setSelectedGroup] = useState<GroupItemResponse | null>(
-    null,
-  );
+  const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
 
   const { groups, pagination, errorMessage, isLoading } =
     useGroupManagementList(pageNumber, pageSize);
+
+  const {
+    groupDetail,
+    errorMessage: groupDetailErrorMessage,
+    isLoading: isGroupDetailLoading,
+  } = useGetGroupDetail(selectedGroup, modalMode === MODAL_MODE.EDIT);
+
   const {
     listPermissions,
     errorMessage: permissionErrorMessage,
@@ -46,25 +53,23 @@ export function GroupManagementPage() {
     setValue,
     register,
     handleSubmit,
+    reset,
     formState: { errors: createGroupErrors },
   } = useForm<CreateGroupPayload>({
     resolver: zodResolver(createGroupSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-      permissions: [],
-    },
+    defaultValues: DEFAULT_GROUP_FORM_VALUES,
     mode: "onSubmit",
   });
 
   const handleOpenAddModal = () => {
     setSelectedGroup(null);
     setSelectedPermissions([]);
+    reset(DEFAULT_GROUP_FORM_VALUES);
     setModalMode(MODAL_MODE.ADD);
   };
 
-  const handleEditGroup = (group: GroupItemResponse) => {
-    setSelectedGroup(group);
+  const handleEditGroup = (groupId: string) => {
+    setSelectedGroup(groupId);
     setSelectedPermissions([]);
     setModalMode(MODAL_MODE.EDIT);
   };
@@ -73,6 +78,7 @@ export function GroupManagementPage() {
     setModalMode(null);
     setSelectedGroup(null);
     setSelectedPermissions([]);
+    reset(DEFAULT_GROUP_FORM_VALUES);
   };
 
   const handlePageChange = (nextPageNumber: number) => {
@@ -102,6 +108,22 @@ export function GroupManagementPage() {
     createGroupMutation.mutate(data);
     handleCloseModal();
   };
+
+  useEffect(() => {
+    if (modalMode !== MODAL_MODE.EDIT || !groupDetail) return;
+
+    const permissions = (groupDetail.module_access ?? []).flatMap(
+      (module) => module.permissions,
+    );
+
+    reset({
+      name: groupDetail.name,
+      description: groupDetail.description ?? "",
+      permissions,
+    });
+
+    setSelectedPermissions(permissions);
+  }, [groupDetail, modalMode, reset]);
 
   if (isLoading) {
     return <SpinnerLoader />;
@@ -142,7 +164,7 @@ export function GroupManagementPage() {
       </section>
 
       <CommonModal
-        key={selectedGroup?.id ?? modalMode}
+        key={selectedGroup ?? modalMode}
         open={modalMode !== null}
         onOpenChange={(open) => {
           if (!open) {
@@ -150,11 +172,15 @@ export function GroupManagementPage() {
           }
         }}
         icon={<ClipboardList className="size-6" />}
-        title={modalMode === MODAL_MODE.EDIT ? "Edit Group" : "Add Group"}
+        title={
+          modalMode === MODAL_MODE.EDIT
+            ? GROUP_MODAL_MODE_CONFIG[MODAL_MODE.EDIT].title
+            : GROUP_MODAL_MODE_CONFIG[MODAL_MODE.ADD].title
+        }
         description={
           modalMode === MODAL_MODE.EDIT
-            ? "Modify group details and adjust permissions for shared access."
-            : "Create or update a user group and save changes."
+            ? GROUP_MODAL_MODE_CONFIG[MODAL_MODE.EDIT].description
+            : GROUP_MODAL_MODE_CONFIG[MODAL_MODE.ADD].description
         }
         bodyClassName="space-y-5"
         footer={
@@ -177,6 +203,7 @@ export function GroupManagementPage() {
             <Button
               type="button"
               size="sm"
+              loading={isGroupDetailLoading || createGroupMutation.isPending}
               onClick={handleSubmit(handleCreateGroup, (errors) => {
                 const permissionError = errors.permissions?.message;
 
@@ -185,47 +212,65 @@ export function GroupManagementPage() {
                 }
               })}
             >
-              {modalMode === MODAL_MODE.EDIT ? "Save" : "Add"}
+              {modalMode === MODAL_MODE.EDIT
+                ? GROUP_MODAL_MODE_CONFIG[MODAL_MODE.EDIT].submitButton
+                : GROUP_MODAL_MODE_CONFIG[MODAL_MODE.ADD].submitButton}
             </Button>
           </>
         }
       >
-        <div className="space-y-2">
-          <Input
-            {...register("name")}
-            label="Group name"
-            type="text"
-            placeholder="Enter group name"
-            required
-            error={!!createGroupErrors.name}
-            helperText={createGroupErrors.name?.message}
-          />
-        </div>
+        {modalMode === MODAL_MODE.EDIT && isGroupDetailLoading ? (
+          <div className="flex justify-center py-6">
+            <SpinnerLoader />
+          </div>
+        ) : (
+          <>
+            <div className="space-y-2">
+              <Input
+                {...register("name")}
+                label="Group name"
+                type="text"
+                placeholder="Enter group name"
+                required
+                error={!!createGroupErrors.name}
+                helperText={createGroupErrors.name?.message}
+              />
+            </div>
 
-        <Textarea
-          {...register("description")}
-          label="Description"
-          placeholder="Basic access to shared features"
-        />
+            <Textarea
+              {...register("description")}
+              label="Description"
+              placeholder="Basic access to shared features"
+            />
 
-        {isPermissionLoading && (
-          <p className="text-sm font-medium text-slate-500">
-            Loading permissions...
-          </p>
-        )}
+            {groupDetailErrorMessage && (
+              <p className="text-sm font-medium text-red-500">
+                {groupDetailErrorMessage}
+              </p>
+            )}
 
-        {permissionErrorMessage && (
-          <p className="text-sm font-medium text-red-500">
-            {permissionErrorMessage}
-          </p>
-        )}
+            {isPermissionLoading && (
+              <p className="text-sm font-medium text-slate-500">
+                Loading permissions...
+              </p>
+            )}
 
-        {!isPermissionLoading && !permissionErrorMessage && (
-          <GroupPermissionsAccess
-            permissions={listPermissions}
-            selectedPermissions={selectedPermissions}
-            onPermissionChange={handlePermissionChange}
-          />
+            {permissionErrorMessage && (
+              <p className="text-sm font-medium text-red-500">
+                {permissionErrorMessage}
+              </p>
+            )}
+
+            {!isPermissionLoading &&
+              !permissionErrorMessage &&
+              !isGroupDetailLoading && (
+                <GroupPermissionsAccess
+                  permissions={listPermissions}
+                  selectedPermissions={selectedPermissions}
+                  onPermissionChange={handlePermissionChange}
+                />
+              )}
+          </>
         )}
       </CommonModal>
     </>
