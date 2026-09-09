@@ -1,5 +1,6 @@
-import { MODAL_MODE } from "@/types/modal.constants";
+import { DEFAULT_PAGE_NUMBER } from "@/constants/pagination.constants";
 import type { CreateGroupPayload } from "./group.types";
+import { MODAL_MODE } from "@/constants/modal.constants";
 
 export enum GROUP_TYPES {
   ADMIN_MEMBER = "ADMIN_MEMBER",
@@ -10,12 +11,11 @@ export enum GROUP_STATUS {
   INACTIVE = "INACTIVE",
 }
 
-export const DEFAULT_GROUP_MANAGEMENT_PAGE_NUMBER = 1;
 export const DEFAULT_GROUP_MANAGEMENT_PAGE_SIZE = 30;
 
 export const groupKeys = {
   all: ["group-management"] as const,
-  list: (pageNumber: number = DEFAULT_GROUP_MANAGEMENT_PAGE_NUMBER, pageSize: number = DEFAULT_GROUP_MANAGEMENT_PAGE_SIZE) =>
+  list: (pageNumber: number = DEFAULT_PAGE_NUMBER, pageSize: number = DEFAULT_GROUP_MANAGEMENT_PAGE_SIZE) =>
     [...groupKeys.all, "list", { pageNumber, pageSize }] as const,
   permissions: () => [...groupKeys.all, "permissions"] as const,
   detail: (groupId: string | null) => [...groupKeys.all, "detail", groupId] as const,

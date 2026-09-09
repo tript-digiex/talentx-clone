@@ -1,11 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { groupManagementListApi } from "../api/group.api";
-import { DEFAULT_GROUP_MANAGEMENT_PAGE_SIZE, groupKeys } from "../types/group.constants";
+import {
+  DEFAULT_GROUP_MANAGEMENT_PAGE_SIZE,
+  groupKeys,
+} from "../types/group.constants";
 import type { GroupManagementListPagination } from "../types/group.types";
+import { DEFAULT_PAGE_NUMBER } from "@/constants/pagination.constants";
 
 export const useGroupManagementList = (
-  pageNumber: number,
-  pageSize = DEFAULT_GROUP_MANAGEMENT_PAGE_SIZE,
+  pageNumber: number = DEFAULT_PAGE_NUMBER,
+  pageSize: number = DEFAULT_GROUP_MANAGEMENT_PAGE_SIZE,
 ) => {
   const query = useQuery({
     queryKey: groupKeys.list(pageNumber, pageSize),
@@ -25,7 +29,9 @@ export const useGroupManagementList = (
       }
     : null;
   const errorMessage =
-    response && !response.success ? response.error.message : query.error?.message;
+    response && !response.success
+      ? response.error.message
+      : query.error?.message;
 
   return {
     ...query,
