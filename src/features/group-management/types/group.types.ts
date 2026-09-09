@@ -33,6 +33,11 @@ export type GroupPermissionResponse = ApiResponse<
 >;
 
 export type CreateGroupPayload = z.infer<typeof createGroupSchema>;
+export type UpdateGroupPayload = z.infer<typeof createGroupSchema>;
 
 export type CreateGroupResponse = ApiResponse<GroupItemDetailResponse>;
 export type GroupDetailResponse = ApiResponse<GroupItemDetailResponse>;
+
+export type UpdateGroupResponse = ApiResponse<
+  Omit<GroupItemDetailResponse, "created_date" | "user_group_count">
+>;

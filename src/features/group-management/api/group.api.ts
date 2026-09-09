@@ -10,6 +10,8 @@ import type {
   GroupDetailResponse,
   GroupItemResponse,
   GroupPermissionResponse,
+  UpdateGroupPayload,
+  UpdateGroupResponse,
 } from "../types/group.types";
 
 export const groupManagementListApi = async (
@@ -47,21 +49,39 @@ export const groupPermissionListApi =
     return response.data;
   };
 
-export const createGroupApi = async (data: CreateGroupPayload): Promise<CreateGroupResponse> => {
+export const createGroupApi = async (
+  data: CreateGroupPayload,
+): Promise<CreateGroupResponse> => {
   const payload = {
     ...data,
     type: GROUP_TYPES.ADMIN_MEMBER,
-  }
+  };
 
   const response = await apiClient.post<CreateGroupResponse>(
     "/v1/group-member",
     payload,
   );
-  
-  return response.data;
-}
 
-export const getGroupDetailApi = async (groupId: string): Promise<GroupDetailResponse> => {
-  const response = await apiClient.get<GroupDetailResponse>(`/v1/group-member/${groupId}`)
   return response.data;
-}
+};
+
+export const getGroupDetailApi = async (
+  groupId: string,
+): Promise<GroupDetailResponse> => {
+  const response = await apiClient.get<GroupDetailResponse>(
+    `/v1/group-member/${groupId}`,
+  );
+  return response.data;
+};
+
+export const updateGroupApi = async (
+  groupId: string,
+  data: UpdateGroupPayload,
+): Promise<UpdateGroupResponse> => {
+  const response = await apiClient.put<UpdateGroupResponse>(
+    `/v1/group-member/${groupId}`,
+    data,
+  );
+
+  return response.data;
+};

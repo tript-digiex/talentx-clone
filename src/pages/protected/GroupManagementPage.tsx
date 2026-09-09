@@ -24,6 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createGroupSchema } from "@/features/group-management/schemas/group.schema";
 import { toast } from "sonner";
 import { useGetGroupDetail } from "@/features/group-management/hooks/useGetGroupDetail";
+import { useUpdateGroup } from "@/features/group-management/hooks/useUpdateGroup";
 
 export function GroupManagementPage() {
   const [pageNumber, setPageNumber] = useState(1);
@@ -48,6 +49,7 @@ export function GroupManagementPage() {
   } = useGroupPermission(modalMode !== null);
 
   const createGroupMutation = useCreateGroup();
+  const updateGroupMutation = useUpdateGroup();
 
   const {
     setValue,
@@ -104,9 +106,36 @@ export function GroupManagementPage() {
     });
   };
 
-  const handleCreateGroup = (data: CreateGroupPayload) => {
-    createGroupMutation.mutate(data);
-    handleCloseModal();
+  const handleSubmitGroup = (data: CreateGroupPayload) => {
+    if (modalMode === MODAL_MODE.EDIT) {
+      if (!selectedGroup) {
+        toast.error("Group id is required");
+        return;
+      }
+
+      updateGroupMutation.mutate(
+        {
+          groupId: selectedGroup,
+          data,
+        },
+        {
+          onSuccess: (response) => {
+            if (response.success) {
+              handleCloseModal();
+            }
+          },
+        },
+      );
+      return;
+    }
+
+    createGroupMutation.mutate(data, {
+      onSuccess: (response) => {
+        if (response.success) {
+          handleCloseModal();
+        }
+      },
+    });
   };
 
   useEffect(() => {
@@ -203,8 +232,12 @@ export function GroupManagementPage() {
             <Button
               type="button"
               size="sm"
-              loading={isGroupDetailLoading || createGroupMutation.isPending}
-              onClick={handleSubmit(handleCreateGroup, (errors) => {
+              loading={
+                isGroupDetailLoading ||
+                createGroupMutation.isPending ||
+                updateGroupMutation.isPending
+              }
+              onClick={handleSubmit(handleSubmitGroup, (errors) => {
                 const permissionError = errors.permissions?.message;
 
                 if (permissionError) {
