@@ -68,3 +68,5 @@ export type UpdateUserResponse = ApiResponse<
     group_member_id?: string;
   }
 >;
+
+export type DeleteUserResponse = ApiResponse<undefined>;

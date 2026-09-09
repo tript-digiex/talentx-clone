@@ -1,6 +1,7 @@
 import { apiClient } from "@/lib/axios";
 import type {
   CreateUserPayload,
+  DeleteUserResponse,
   GROUP_MEMBER_RESPONSE,
   UpdateUserPayload,
   UpdateUserResponse,
@@ -72,5 +73,14 @@ export const updateUserApi = async (
     payload,
   );
 
+  return response.data;
+};
+
+export const deleteUserApi = async (
+  userId: string,
+): Promise<DeleteUserResponse> => {
+  const response = await apiClient.delete<DeleteUserResponse>(
+    `/v1/users/member/${userId}`,
+  );
   return response.data;
 };
