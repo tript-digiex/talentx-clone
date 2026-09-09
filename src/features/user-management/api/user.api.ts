@@ -1,10 +1,15 @@
 import { apiClient } from "@/lib/axios";
 import type {
+  CreateUserPayload,
   GROUP_MEMBER_RESPONSE,
   UserListResponse,
+  UserResponse,
 } from "../types/user.types";
 import { DEFAULT_PAGE_NUMBER } from "@/constants/pagination.constants";
-import { DEFAULT_USER_MANAGEMENT_PAGE_SIZE } from "../types/user.constants";
+import {
+  DEFAULT_USER_MANAGEMENT_PAGE_SIZE,
+  USER_ROLES,
+} from "../types/user.constants";
 import {
   GROUP_STATUS,
   GROUP_TYPES,
@@ -25,16 +30,28 @@ export const getListUserApi = async (
 
 export const getGroupMemberListApi =
   async (): Promise<GROUP_MEMBER_RESPONSE> => {
-    const payload = {
-      type: GROUP_TYPES.ADMIN_MEMBER,
-      status: GROUP_STATUS.ACTIVE,
-    };
-
     const response = await apiClient.get("/v1/group-member", {
       params: {
-        payload,
+        type: GROUP_TYPES.ADMIN_MEMBER,
+        status: GROUP_STATUS.ACTIVE,
       },
     });
 
     return response.data;
   };
+
+export const inviteUserApi = async ({
+  group_member_id,
+  ...input
+}: CreateUserPayload): Promise<UserResponse> => {
+  const payload = {
+    ...input,
+    ...(input.role === USER_ROLES.ADMIN_MEMBER ? { group_member_id } : {}),
+  };
+
+  const response = await apiClient.post<UserResponse>(
+    "/v1/users/member",
+    payload,
+  );
+  return response.data;
+};

@@ -5,6 +5,12 @@ import {
   type USER_STATUS,
 } from "./user.constants";
 import type { ApiListData, ApiListResponse, ApiResponse } from "@/lib/axios";
+import type {
+  GROUP_STATUS,
+  GROUP_TYPES,
+} from "@/features/group-management/types/group.constants";
+import type { createUserSchema } from "../schemas/user.schemas";
+import type z from "zod";
 
 export type UserItemResponse = {
   id: string;
@@ -32,3 +38,17 @@ export type UserManagementListPagination = Omit<
   ApiListData<UserItemResponse>,
   "content"
 > | null;
+
+export type GROUP_MEMBER_LIST_DATA = {
+  id: string;
+  name: string;
+  status: GROUP_STATUS;
+  type: GROUP_TYPES;
+  created_date: Date;
+};
+
+export type GROUP_MEMBER_RESPONSE = ApiResponse<GROUP_MEMBER_LIST_DATA[]>;
+
+export type CreateUserPayload = z.infer<typeof createUserSchema>;
+
+export type UserResponse = ApiResponse<UserItemResponse>;

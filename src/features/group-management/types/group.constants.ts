@@ -19,6 +19,7 @@ export const groupKeys = {
     [...groupKeys.all, "list", { pageNumber, pageSize }] as const,
   permissions: () => [...groupKeys.all, "permissions"] as const,
   detail: (groupId: string | null) => [...groupKeys.all, "detail", groupId] as const,
+  groups: () => [...groupKeys.all, "groups"] as const,
 };
 
 export const DEFAULT_GROUP_FORM_VALUES: CreateGroupPayload = {
