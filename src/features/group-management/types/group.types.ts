@@ -41,3 +41,5 @@ export type GroupDetailResponse = ApiResponse<GroupItemDetailResponse>;
 export type UpdateGroupResponse = ApiResponse<
   Omit<GroupItemDetailResponse, "created_date" | "user_group_count">
 >;
+
+export type DeleteGroupResponse = ApiResponse<string>;

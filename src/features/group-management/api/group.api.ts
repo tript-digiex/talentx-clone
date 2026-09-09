@@ -7,6 +7,7 @@ import {
 import type {
   CreateGroupPayload,
   CreateGroupResponse,
+  DeleteGroupResponse,
   GroupDetailResponse,
   GroupItemResponse,
   GroupPermissionResponse,
@@ -81,6 +82,16 @@ export const updateGroupApi = async (
   const response = await apiClient.put<UpdateGroupResponse>(
     `/v1/group-member/${groupId}`,
     data,
+  );
+
+  return response.data;
+};
+
+export const deleteGroupApi = async (
+  groupId: string,
+): Promise<DeleteGroupResponse> => {
+  const response = await apiClient.delete<DeleteGroupResponse>(
+    `/v1/group-member/${groupId}`,
   );
 
   return response.data;

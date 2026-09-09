@@ -1,5 +1,6 @@
 import { ErrorMessage } from "@/components/common/ErrorMessage";
 import { CommonModal } from "@/components/common/CommonModal";
+import { ConfirmModal } from "@/components/common/ConfirmModal";
 import { ManagementPagination } from "@/components/common/ManagementPagination";
 import { SpinnerLoader } from "@/components/common/SpinnerLoader";
 import Button from "@/components/ui/custom/Button";
@@ -25,6 +26,7 @@ import { createGroupSchema } from "@/features/group-management/schemas/group.sch
 import { toast } from "sonner";
 import { useGetGroupDetail } from "@/features/group-management/hooks/useGetGroupDetail";
 import { useUpdateGroup } from "@/features/group-management/hooks/useUpdateGroup";
+import { useDeleteGroup } from "@/features/group-management/hooks/useDeleteGroup";
 
 export function GroupManagementPage() {
   const [pageNumber, setPageNumber] = useState(1);
@@ -32,6 +34,7 @@ export function GroupManagementPage() {
   const [modalMode, setModalMode] = useState<MODAL_MODE | null>(null);
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
   const { groups, pagination, errorMessage, isLoading } =
     useGroupManagementList(pageNumber, pageSize);
@@ -50,6 +53,7 @@ export function GroupManagementPage() {
 
   const createGroupMutation = useCreateGroup();
   const updateGroupMutation = useUpdateGroup();
+  const deleteGroupMutation = useDeleteGroup();
 
   const {
     setValue,
@@ -80,6 +84,7 @@ export function GroupManagementPage() {
     setModalMode(null);
     setSelectedGroup(null);
     setSelectedPermissions([]);
+    setIsDeleteConfirmOpen(false);
     reset(DEFAULT_GROUP_FORM_VALUES);
   };
 
@@ -136,6 +141,28 @@ export function GroupManagementPage() {
         }
       },
     });
+  };
+
+  const handleOpenDeleteConfirm = () => {
+    setIsDeleteConfirmOpen(true);
+  };
+
+  const handleDeleteGroup = () => {
+    if (modalMode === MODAL_MODE.EDIT) {
+      if (!selectedGroup) {
+        toast.error("Group id is required");
+        return;
+      }
+
+      deleteGroupMutation.mutate(selectedGroup, {
+        onSuccess: (response) => {
+          if (response.success) {
+            setIsDeleteConfirmOpen(false);
+            handleCloseModal();
+          }
+        },
+      });
+    }
   };
 
   useEffect(() => {
@@ -224,7 +251,12 @@ export function GroupManagementPage() {
             </Button>
 
             {modalMode === MODAL_MODE.EDIT && (
-              <Button type="button" variant="outline" size="sm">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleOpenDeleteConfirm}
+              >
                 Delete
               </Button>
             )}
@@ -306,6 +338,16 @@ export function GroupManagementPage() {
           </>
         )}
       </CommonModal>
+
+      <ConfirmModal
+        open={isDeleteConfirmOpen}
+        title="Remove Group"
+        description="This action cannot be undone. Are you sure you want to delete this group?"
+        confirmLabel="Delete"
+        onOpenChange={setIsDeleteConfirmOpen}
+        onConfirm={handleDeleteGroup}
+        loading={deleteGroupMutation.isPending}
+      />
     </>
   );
 }
