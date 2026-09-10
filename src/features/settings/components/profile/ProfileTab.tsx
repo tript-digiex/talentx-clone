@@ -14,7 +14,7 @@ export const ProfileTab = () => {
         firstName={user?.first_name || "-"}
         lastName={user?.last_name || "-"}
         email={user?.email || "-"}
-        role={USER_ROLES.ADMIN}
+        role={user?.role || USER_ROLES.ADMIN}
       />
     </div>
   );

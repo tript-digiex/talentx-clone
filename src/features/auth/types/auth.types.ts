@@ -5,6 +5,7 @@ import type {
 } from "../schemas/auth.schema";
 import type { USER_TYPE } from "./auth.constants";
 import type { ApiResponse } from "@/lib/axios";
+import type { USER_ROLES } from "@/features/user-management/types/user.constants";
 
 export type BaseAuthPayload = {
   domain: string;
@@ -16,7 +17,7 @@ export type LoginFormType = z.infer<typeof loginFormSchema>;
 export type AuthUser = {
   id: string;
   email: string;
-  role: string;
+  role: USER_ROLES;
   user_type: string;
   first_name: string;
   last_name: string;
