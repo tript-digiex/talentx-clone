@@ -22,3 +22,4 @@ export type CreateCountryHolidayPayload = z.infer<
 >;
 
 export type UpdateCountryHolidayPayload = CreateCountryHolidayPayload
+export type DeleteCountryHolidayResponse = ApiResponse<string>

@@ -9,6 +9,7 @@ type CountryListItemProps = {
   country: CountryData;
   onClick: () => void;
   onEdit: () => void;
+  onDelete: () => void;
 };
 
 export const CountryListItem = ({
@@ -16,6 +17,7 @@ export const CountryListItem = ({
   country,
   onClick,
   onEdit,
+  onDelete,
 }: CountryListItemProps) => {
   return (
     <div className="w-full flex items-center gap-1 my-2">
@@ -43,9 +45,14 @@ export const CountryListItem = ({
         </div>
       </div>
       <Button
+        type="button"
         leftIcon={<X className="size-6" />}
         size="sm"
         variant="secondary"
+        onClick={(event) => {
+          event.stopPropagation();
+          onDelete();
+        }}
       />
     </div>
   );

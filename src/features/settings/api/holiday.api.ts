@@ -2,6 +2,7 @@ import { apiClient } from "@/lib/axios";
 import type {
   CountryResponse,
   CreateCountryHolidayPayload,
+  DeleteCountryHolidayResponse,
   UpdateCountryHolidayPayload,
 } from "../types/holidays/holidays.types";
 
@@ -30,3 +31,12 @@ export const updateCountryHoliday = async (
   );
   return response.data;
 };
+
+export const deleteCountryHoliday = async (
+  countryId: string,
+): Promise<DeleteCountryHolidayResponse> => {
+  const response = await apiClient.delete<DeleteCountryHolidayResponse>(
+    `/v1/country-holiday/${countryId}`,
+  );
+  return response.data;
+}

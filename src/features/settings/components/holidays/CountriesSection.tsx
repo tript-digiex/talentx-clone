@@ -7,6 +7,7 @@ import { CountryListItem } from "./components/CountryListItem";
 import { MODAL_MODE } from "@/constants/modal.constants";
 import { CountryFormModal } from "./components/CountryFormModal";
 import type { CountryData } from "../../types/holidays/holidays.types";
+import { DeleteCountryModal } from "./components/DeleteCountryModal";
 
 export const CountriesSection = () => {
   const {
@@ -20,6 +21,7 @@ export const CountriesSection = () => {
   const [selectedCountry, setSelectedCountry] = useState<CountryData | null>(
     null,
   );
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
   const handleOpenAddCountryModal = () => {
     setSelectedCountry(null);
@@ -34,6 +36,28 @@ export const CountriesSection = () => {
   const handleCloseModal = () => {
     setSelectedCountry(null);
     setModalMode(null);
+  };
+
+  const handleOpenDeleteConfirm = (country: CountryData) => {
+    setSelectedCountry(country);
+    setIsDeleteConfirmOpen(true);
+  };
+
+  const handleCloseDeleteConfirm = () => {
+    setSelectedCountry(null);
+    setIsDeleteConfirmOpen(false);
+  };
+
+  const handleDeletedCountry = () => {
+    if (selectedCountry?.country_code === activeCountry) {
+      const nextActiveCountry = countries.find(
+        (country) => country.id !== selectedCountry.id,
+      );
+
+      setActiveCountry(nextActiveCountry?.country_code ?? "");
+    }
+
+    handleCloseDeleteConfirm();
   };
 
   useEffect(() => {
@@ -76,6 +100,7 @@ export const CountriesSection = () => {
                 country={country}
                 onClick={() => setActiveCountry(country.country_code)}
                 onEdit={() => handleOpenEditCountryModal(country)}
+                onDelete={() => handleOpenDeleteConfirm(country)}
               />
             ))}
           </div>
@@ -93,6 +118,17 @@ export const CountriesSection = () => {
           }
         }}
         setActiveCountry={setActiveCountry}
+      />
+
+      <DeleteCountryModal
+        open={isDeleteConfirmOpen}
+        countryId={selectedCountry?.id}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            handleCloseDeleteConfirm();
+          }
+        }}
+        onDeleted={handleDeletedCountry}
       />
     </>
   );
