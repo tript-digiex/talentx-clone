@@ -6,12 +6,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UserPen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { useUpdateProfile } from "../../hooks/profile/useUpdateProfile";
 import { updateUserProfileSchema } from "../../schemas/profile.schemas";
-import type { UserProfilePayload } from "../../types/profile.types";
 import type { USER_ROLES } from "@/features/user-management/types/user.constants";
 import { getProfileFormValues } from "../utils/profile.utils";
+import type { UserProfilePayload } from "../../types/profile/profile.types";
 
 type UserProfileDetailProps = {
   firstName: string;

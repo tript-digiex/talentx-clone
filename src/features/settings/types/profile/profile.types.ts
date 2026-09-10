@@ -1,7 +1,7 @@
 import type z from "zod";
-import type { updateUserProfileSchema } from "../schemas/profile.schemas";
 import type { USER_ROLES } from "@/features/user-management/types/user.constants";
 import type { ApiResponse } from "@/lib/axios";
+import type { updateUserProfileSchema } from "../../schemas/profile.schemas";
 
 export type UserProfilePayload = z.infer<typeof updateUserProfileSchema>;
 

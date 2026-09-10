@@ -1,8 +1,5 @@
 import { apiClient } from "@/lib/axios";
-import type {
-  UserProfilePayload,
-  UserProfileResponse,
-} from "../types/profile.types";
+import type { UserProfilePayload, UserProfileResponse } from "../types/profile/profile.types";
 
 export const updateUserProfileApi = async (
   payload: UserProfilePayload,
