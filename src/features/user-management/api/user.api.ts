@@ -12,7 +12,6 @@ import type {
 import { DEFAULT_PAGE_NUMBER } from "@/constants/pagination.constants";
 import {
   DEFAULT_USER_MANAGEMENT_PAGE_SIZE,
-  USER_ROLES,
 } from "../types/user.constants";
 import {
   GROUP_STATUS,
