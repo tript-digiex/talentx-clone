@@ -6,6 +6,7 @@ import { ErrorMessage } from "@/components/common/ErrorMessage";
 import { CountryListItem } from "./components/CountryListItem";
 import { MODAL_MODE } from "@/constants/modal.constants";
 import { CountryFormModal } from "./components/CountryFormModal";
+import type { CountryData } from "../../types/holidays/holidays.types";
 
 export const CountriesSection = () => {
   const {
@@ -16,17 +17,22 @@ export const CountriesSection = () => {
   } = useCountryHoliday();
   const [activeCountry, setActiveCountry] = useState("");
   const [modalMode, setModalMode] = useState<MODAL_MODE | null>(null);
-  const [selectedCountryCode, setSelectedCountryCode] = useState<string | null>(
+  const [selectedCountry, setSelectedCountry] = useState<CountryData | null>(
     null,
   );
 
   const handleOpenAddCountryModal = () => {
-    setSelectedCountryCode(null);
+    setSelectedCountry(null);
     setModalMode(MODAL_MODE.ADD);
   };
 
+  const handleOpenEditCountryModal = (country: CountryData) => {
+    setSelectedCountry(country);
+    setModalMode(MODAL_MODE.EDIT);
+  };
+
   const handleCloseModal = () => {
-    setSelectedCountryCode(null);
+    setSelectedCountry(null);
     setModalMode(null);
   };
 
@@ -67,8 +73,9 @@ export const CountriesSection = () => {
               <CountryListItem
                 key={country.country_code}
                 active={activeCountry === country.country_code}
-                country_code={country.country_code}
+                country={country}
                 onClick={() => setActiveCountry(country.country_code)}
+                onEdit={() => handleOpenEditCountryModal(country)}
               />
             ))}
           </div>
@@ -78,7 +85,7 @@ export const CountriesSection = () => {
       <CountryFormModal
         open={modalMode !== null}
         mode={modalMode}
-        countryCode={selectedCountryCode}
+        country={selectedCountry}
         countries={countries}
         onOpenChange={(isOpen) => {
           if (!isOpen) {

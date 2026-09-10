@@ -1,8 +1,9 @@
 import { CommonModal } from "@/components/common/CommonModal";
 import Button from "@/components/ui/custom/Button";
 import Select from "@/components/ui/custom/Select";
-import type { MODAL_MODE } from "@/constants/modal.constants";
+import { MODAL_MODE } from "@/constants/modal.constants";
 import { useCreateCountryHoliday } from "@/features/settings/hooks/holidays/useCreateCountryHoliday";
+import { useUpdateCountryHoliday } from "@/features/settings/hooks/holidays/useUpdateHoliday";
 import { createCountryHolidaySchema } from "@/features/settings/schemas/holidays.schemas";
 import {
   COUNTRY_FLAG_MAP,
@@ -21,7 +22,7 @@ import { toast } from "sonner";
 type CountryFormModalProps = {
   open: boolean;
   mode: MODAL_MODE | null;
-  countryCode: string | null;
+  country: CountryData | null;
   countries: CountryData[];
   onOpenChange: (open: boolean) => void;
   setActiveCountry: (countryCode: string) => void;
@@ -30,12 +31,14 @@ type CountryFormModalProps = {
 export const CountryFormModal = ({
   open,
   mode,
-  countryCode,
+  country,
   countries,
   onOpenChange,
   setActiveCountry,
 }: CountryFormModalProps) => {
   const createCountryHolidayMutation = useCreateCountryHoliday();
+  const updateCountryHolidayMutation = useUpdateCountryHoliday();
+
   const {
     control,
     handleSubmit,
@@ -53,6 +56,30 @@ export const CountryFormModal = ({
   };
 
   const handleSubmitCountry = (data: CreateCountryHolidayPayload) => {
+    if (mode === MODAL_MODE.EDIT) {
+      if (!country?.country_code) {
+        toast.error("Country code is required");
+        return;
+      }
+
+      updateCountryHolidayMutation.mutate(
+        {
+          countryId: country.id,
+          payload: data,
+        },
+        {
+          onSuccess: (response) => {
+            if (response.success) {
+              handleCloseModal();
+              setActiveCountry(data.country_code);
+            }
+          },
+        },
+      );
+
+      return;
+    }
+
     createCountryHolidayMutation.mutate(data, {
       onSuccess: (response) => {
         if (response.success) {
@@ -71,7 +98,7 @@ export const CountryFormModal = ({
     return Object.entries(COUNTRY_FLAG_MAP)
       .filter(
         ([optionCountryCode]) =>
-          optionCountryCode === countryCode ||
+          optionCountryCode === country?.country_code ||
           !existingCountryCodes.has(optionCountryCode),
       )
       .map(([optionCountryCode, countryInfo]) => ({
@@ -84,7 +111,7 @@ export const CountryFormModal = ({
           />
         ),
       }));
-  }, [countries, countryCode]);
+  }, [countries, country?.id]);
 
   useEffect(() => {
     if (!open) {
@@ -92,9 +119,9 @@ export const CountryFormModal = ({
     }
 
     reset({
-      country_code: countryCode ?? "",
+      country_code: country?.country_code ?? "",
     });
-  }, [countryCode, open, reset]);
+  }, [country?.country_code, open, reset]);
 
   if (!mode) {
     return null;
@@ -126,7 +153,10 @@ export const CountryFormModal = ({
           <Button
             type="button"
             size="sm"
-            loading={createCountryHolidayMutation.isPending}
+            loading={
+              createCountryHolidayMutation.isPending ||
+              updateCountryHolidayMutation.isPending
+            }
             onClick={handleSubmit(handleSubmitCountry, (errors) => {
               const firstError = Object.values(errors)[0]?.message;
 

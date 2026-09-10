@@ -20,3 +20,5 @@ export type CountryInfo = {
 export type CreateCountryHolidayPayload = z.infer<
   typeof createCountryHolidaySchema
 >;
+
+export type UpdateCountryHolidayPayload = CreateCountryHolidayPayload
