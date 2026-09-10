@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateUserProfileApi } from "../../api/profile.api";
 import { authKeys } from "@/features/auth/types/auth.constants";
-import type { UserProfileResponse } from "../../types/profile.types";
+import type { UserProfileResponse } from "../../types/profile/profile.types";
 import { toast } from "sonner";
 
 export const useUpdateProfile = () => {

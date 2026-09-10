@@ -4,7 +4,7 @@ import { getCountryHoliday } from "../../api/holiday.api";
 
 export const useCountryHoliday = () => {
   const query = useQuery({
-    queryKey: holidayKeys.countries,
+    queryKey: holidayKeys.countries(),
     queryFn: getCountryHoliday,
     enabled: true,
   });

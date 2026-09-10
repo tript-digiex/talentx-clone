@@ -4,6 +4,8 @@ import { useCountryHoliday } from "../../hooks/holidays/useCountryHoliday";
 import { SpinnerLoader } from "@/components/common/SpinnerLoader";
 import { ErrorMessage } from "@/components/common/ErrorMessage";
 import { CountryListItem } from "./components/CountryListItem";
+import { MODAL_MODE } from "@/constants/modal.constants";
+import { CountryFormModal } from "./components/CountryFormModal";
 
 export const CountriesSection = () => {
   const {
@@ -13,6 +15,20 @@ export const CountriesSection = () => {
     errorMessage,
   } = useCountryHoliday();
   const [activeCountry, setActiveCountry] = useState("");
+  const [modalMode, setModalMode] = useState<MODAL_MODE | null>(null);
+  const [selectedCountryCode, setSelectedCountryCode] = useState<string | null>(
+    null,
+  );
+
+  const handleOpenAddCountryModal = () => {
+    setSelectedCountryCode(null);
+    setModalMode(MODAL_MODE.ADD);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedCountryCode(null);
+    setModalMode(null);
+  };
 
   useEffect(() => {
     if (countries.length > 0 && !activeCountry) {
@@ -35,21 +51,42 @@ export const CountriesSection = () => {
   }
 
   return (
-    <div className="flex-1 border rounded-md">
-      <div className="font-bold border-b px-4 py-2">Countries</div>
-      <div className="px-4 p-2">
-        <Button className="font-normal p-4 my-2">Add Country</Button>
-        <div className="flex-1">
-          {countries.map((country) => (
-            <CountryListItem
-              key={country.country_code}
-              active={activeCountry === country.country_code}
-              country_code={country.country_code}
-              onClick={() => setActiveCountry(country.country_code)}
-            />
-          ))}
+    <>
+      <div className="flex-1 border rounded-md">
+        <div className="font-bold border-b px-4 py-2">Countries</div>
+        <div className="px-4 p-2">
+          <Button
+            type="button"
+            className="font-normal p-4 my-2"
+            onClick={handleOpenAddCountryModal}
+          >
+            Add Country
+          </Button>
+          <div className="flex-1">
+            {countries.map((country) => (
+              <CountryListItem
+                key={country.country_code}
+                active={activeCountry === country.country_code}
+                country_code={country.country_code}
+                onClick={() => setActiveCountry(country.country_code)}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+
+      <CountryFormModal
+        open={modalMode !== null}
+        mode={modalMode}
+        countryCode={selectedCountryCode}
+        countries={countries}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            handleCloseModal();
+          }
+        }}
+        setActiveCountry={setActiveCountry}
+      />
+    </>
   );
 };

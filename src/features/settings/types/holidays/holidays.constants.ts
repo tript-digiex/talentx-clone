@@ -6,6 +6,7 @@ import SG from "@/assets/images/flag/SG.svg";
 import US from "@/assets/images/flag/US.svg";
 import VN from "@/assets/images/flag/VN.svg";
 import type { CountryInfo } from "./holidays.types";
+import { MODAL_MODE } from "@/constants/modal.constants";
 
 export enum COUNTRY_STATUS {
   ACTIVE = "active",
@@ -18,7 +19,8 @@ export enum HOLIDAY_STATUS {
 }
 
 export const holidayKeys = {
-  countries: ["countries"] as const,
+  all: ["holidays"] as const,
+  countries: () => [...holidayKeys.all, "countries"] as const,
 };
 
 export const COUNTRY_FLAG_MAP: Record<string, CountryInfo> = {
@@ -50,4 +52,20 @@ export const COUNTRY_FLAG_MAP: Record<string, CountryInfo> = {
     name: "Viet Nam",
     img: VN,
   },
+};
+
+export const COUNTRY_MODAL_MODE_CONFIG = {
+  [MODAL_MODE.ADD]: {
+    title: "Add Country",
+    submitButton: "Add",
+  },
+
+  [MODAL_MODE.EDIT]: {
+    title: "Edit Country",
+    submitButton: "Save",
+  },
+} as const;
+
+export const DEFAULT_CREATE_HOLIDAY_FORM_VALUES = {
+  country_code: "",
 };

@@ -26,7 +26,7 @@ export const useUpdateUser = () => {
 
       toast.success("User updated successfully");
       query.invalidateQueries({
-        queryKey: userKeys.all,
+        queryKey: userKeys.list(),
       });
     },
     onError: (error: Error) => {

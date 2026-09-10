@@ -19,7 +19,7 @@ export const CountryListItem = ({
       <div
         onClick={onClick}
         className={cn(
-          "flex-1 flex items-center justify-between border px-2 py-1 rounded-md",
+          "flex-1 flex items-center justify-between border px-4 py-1 rounded-md",
           active && "bg-gray-300",
         )}
       >

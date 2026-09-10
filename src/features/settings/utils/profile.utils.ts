@@ -1,4 +1,4 @@
-import type { UserProfilePayload } from "../../types/profile.types";
+import type { UserProfilePayload } from "../types/profile/profile.types";
 
 export const getProfileFormValues = (
   firstName: string,

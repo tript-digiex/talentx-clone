@@ -9,8 +9,8 @@ import { useForm } from "react-hook-form";
 import { useUpdateProfile } from "../../hooks/profile/useUpdateProfile";
 import { updateUserProfileSchema } from "../../schemas/profile.schemas";
 import type { USER_ROLES } from "@/features/user-management/types/user.constants";
-import { getProfileFormValues } from "../utils/profile.utils";
 import type { UserProfilePayload } from "../../types/profile/profile.types";
+import { getProfileFormValues } from "../../utils/profile.utils";
 
 type UserProfileDetailProps = {
   firstName: string;
