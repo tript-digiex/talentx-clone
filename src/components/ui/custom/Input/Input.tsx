@@ -11,6 +11,7 @@ const Input = ({
   rightIcon,
   error,
   helperText,
+  className,
   ...props
 }: InputProps) => {
   const type: InputType = props.type;
@@ -36,7 +37,12 @@ const Input = ({
         <InputShadcn
           {...props}
           type={inputType}
-          className="flex-1 placeholder:text-slate-400"
+          className={cn(
+            "flex-1 placeholder:text-slate-400",
+            props.readOnly ||
+              (props.disabled && "cursor-not-allowed bg-input/50 opacity-50"),
+            className,
+          )}
         />
         <InputRightAdornment
           isPasswordInput={isPasswordInput}

@@ -138,6 +138,7 @@ export function UserFormModal({
     return null;
   }
 
+  const isEditMode = mode === MODAL_MODE.EDIT;
   const modalConfig = USER_MODAL_MODE_CONFIG[mode];
 
   return (
@@ -195,7 +196,7 @@ export function UserFormModal({
         </>
       }
     >
-      {mode === MODAL_MODE.EDIT && isUserDetailLoading ? (
+      {isEditMode && isUserDetailLoading ? (
         <div className="flex justify-center py-6">
           <SpinnerLoader />
         </div>
@@ -228,6 +229,7 @@ export function UserFormModal({
             label="Email"
             type="email"
             placeholder="Enter email"
+            disabled={isEditMode}
             required
             error={!!createUserErrors.email}
             helperText={createUserErrors.email?.message}
