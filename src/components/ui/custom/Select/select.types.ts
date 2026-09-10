@@ -1,28 +1,32 @@
 import type { ReactNode } from "react";
 
 export type SelectOption = {
-  label: ReactNode;
   value: string;
+  label: ReactNode;
+  icon?: ReactNode;
   disabled?: boolean;
+  searchValue?: string;
 };
 
 export type SelectProps = {
   options: SelectOption[];
   value?: string;
   name?: string;
-  label?: ReactNode;
-  placeholder?: ReactNode;
+  label?: string;
+  placeholder?: string;
   required?: boolean;
   disabled?: boolean;
   error?: boolean;
-  helperText?: ReactNode;
+  helperText?: string;
   loading?: boolean;
-  emptyMessage?: ReactNode;
+  emptyMessage?: string;
+  searchable?: boolean;
+  searchPlaceholder?: string;
   maxVisibleItems?: number;
   menuPlacement?: "top" | "bottom";
   className?: string;
   triggerClassName?: string;
   menuClassName?: string;
   onBlur?: () => void;
-  onValueChange?: (value: string) => void;
+  onValueChange: (value: string) => void;
 };

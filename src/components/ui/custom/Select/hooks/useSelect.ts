@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-
-import type { SelectOption } from "./select.types";
+import type { SelectOption } from "../select.types";
 
 interface UseSelectProps {
   options: SelectOption[];
   value?: string;
+  menuRef?: React.RefObject<HTMLDivElement | null>;
   disabled?: boolean;
   loading?: boolean;
   onBlur?: () => void;
@@ -14,6 +14,7 @@ interface UseSelectProps {
 export const useSelect = ({
   options,
   value,
+  menuRef,
   disabled = false,
   loading = false,
   onBlur,
@@ -35,7 +36,11 @@ export const useSelect = ({
     }
 
     const handlePointerDown = (event: PointerEvent) => {
-      if (!wrapperRef.current?.contains(event.target as Node)) {
+      const target = event.target as Node;
+      const clickedTrigger = wrapperRef.current?.contains(target);
+      const clickedMenu = menuRef?.current?.contains(target);
+
+      if (!clickedTrigger && !clickedMenu) {
         setOpen(false);
         onBlur?.();
       }
@@ -46,7 +51,7 @@ export const useSelect = ({
     return () => {
       document.removeEventListener("pointerdown", handlePointerDown);
     };
-  }, [onBlur, open]);
+  }, [menuRef, onBlur, open]);
 
   const handleToggle = () => {
     if (isDisabled) {
