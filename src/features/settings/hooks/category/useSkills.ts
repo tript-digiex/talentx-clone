@@ -6,6 +6,7 @@ export const useSkills = (categoryId: string) => {
   const query = useQuery({
     queryKey: categoryKeys.skills(categoryId),
     queryFn: () => getSkillsByCategoryId(categoryId),
+    enabled: !!categoryId,
   });
 
   const response = query.data;

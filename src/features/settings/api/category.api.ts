@@ -51,3 +51,18 @@ export const getSkillsByCategoryId = async (
   );
   return response.data;
 };
+
+export const createSkillApi = async (
+  payload: FormData,
+): Promise<CreateCategoryResponse> => {
+  const response = await apiClient.post<CreateCategoryResponse>(
+    "/v1/skill",
+    payload,
+  );
+  return response.data;
+};
+
+export const deleteSkillApi = async (skillId: string) => {
+  const response = await apiClient.delete(`/v1/skill/${skillId}`);
+  return response.data;
+};

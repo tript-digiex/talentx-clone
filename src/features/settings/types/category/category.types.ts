@@ -39,3 +39,5 @@ export type SkillData = {
 };
 
 export type ListSkillResponse = ApiResponse<SkillData[]>;
+
+export type DeleteSkillResponse = ApiResponse<string>;
