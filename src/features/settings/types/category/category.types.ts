@@ -22,3 +22,5 @@ export type CreateCategoryResponse = ApiResponse<
 >;
 
 export type UpdateCategoryResponse = ApiResponse<CategoryData>;
+
+export type DeleteCategoryResponse = ApiResponse<string>;

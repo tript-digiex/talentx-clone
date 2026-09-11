@@ -7,6 +7,7 @@ import { ErrorMessage } from "@/components/common/ErrorMessage";
 import { useEffect, useState } from "react";
 import { CategoryFormModal } from "./components/CategoryFormModal";
 import { MODAL_MODE } from "@/constants/modal.constants";
+import { DeleteCategoryModal } from "./components/DeleteCategoryModal";
 
 type CategorySectionProps = {
   categories: CategoryData[];
@@ -29,6 +30,8 @@ export const CategorySection = ({
   const [selectedCategory, setSelectedCategory] = useState<CategoryData | null>(
     null,
   );
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+
 
   const handleOpenAddCountryModal = () => {
     setSelectedCategory(null);
@@ -38,6 +41,22 @@ export const CategorySection = ({
   const handleOpenEditCountryModal = (category: CategoryData) => {
     setSelectedCategory(category);
     setModalMode(MODAL_MODE.EDIT);
+  };
+
+
+  const handleCloseModal = () => {
+    setSelectedCategory(null);
+    setModalMode(null);
+  };
+
+  const handleOpenDeleteConfirm = (category: CategoryData) => {
+    setSelectedCategory(category);
+    setIsDeleteConfirmOpen(true);
+  };
+
+  const handleCloseDeleteConfirm = () => {
+    setSelectedCategory(null);
+    setIsDeleteConfirmOpen(false);
   };
 
   useEffect(() => {
@@ -71,6 +90,7 @@ export const CategorySection = ({
               active={activeCategoryId === category.id}
               onClick={() => setActiveCategoryId(category.id)}
               onEdit={() => handleOpenEditCountryModal(category)}
+              onDelete={() => handleOpenDeleteConfirm(category)}
             />
           ))}
         </div>
@@ -86,6 +106,17 @@ export const CategorySection = ({
           }
         }}
         setActiveCategoryId={setActiveCategoryId}
+      />
+
+      <DeleteCategoryModal
+        open={isDeleteConfirmOpen}
+        categoryId={selectedCategory?.id}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            handleCloseDeleteConfirm();
+          }
+        }}
+        onDeleted={() => handleCloseDeleteConfirm()}
       />
     </>
   );
