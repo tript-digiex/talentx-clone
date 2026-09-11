@@ -3,6 +3,7 @@ import type {
   CountryResponse,
   CreateCountryHolidayPayload,
   DeleteCountryHolidayResponse,
+  HolidayResponse,
   UpdateCountryHolidayPayload,
 } from "../types/holidays/holidays.types";
 
@@ -39,4 +40,16 @@ export const deleteCountryHoliday = async (
     `/v1/country-holiday/${countryId}`,
   );
   return response.data;
-}
+};
+
+export const getHolidayByCountryId = async (
+  countryId: string,
+): Promise<HolidayResponse> => {
+  const response = await apiClient.get<HolidayResponse>("/v1/holiday", {
+    params: {
+      country_holiday_id: countryId,
+    },
+  });
+
+  return response.data;
+};

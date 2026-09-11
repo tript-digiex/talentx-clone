@@ -1,5 +1,5 @@
 import type { ApiResponse } from "@/lib/axios";
-import type { COUNTRY_STATUS } from "./holidays.constants";
+import type { COUNTRY_STATUS, HOLIDAY_STATUS } from "./holidays.constants";
 import type z from "zod";
 import type { createCountryHolidaySchema } from "../../schemas/holidays.schemas";
 
@@ -21,5 +21,18 @@ export type CreateCountryHolidayPayload = z.infer<
   typeof createCountryHolidaySchema
 >;
 
-export type UpdateCountryHolidayPayload = CreateCountryHolidayPayload
-export type DeleteCountryHolidayResponse = ApiResponse<string>
+export type UpdateCountryHolidayPayload = CreateCountryHolidayPayload;
+export type DeleteCountryHolidayResponse = ApiResponse<string>;
+
+export type HolidayData = {
+  id: string;
+  country_holiday_id: string;
+  holiday_date: Date;
+  date: string;
+  description: string;
+  status: HOLIDAY_STATUS;
+  created_date: string;
+  updated_date: string;
+};
+
+export type HolidayResponse = ApiResponse<HolidayData[]>;

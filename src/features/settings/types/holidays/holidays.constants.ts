@@ -18,9 +18,18 @@ export enum HOLIDAY_STATUS {
   INACTIVE = "inactive",
 }
 
+export enum SECTION_LIST_ITEM_TYPE {
+  COUNTRY = "country",
+  HOLIDAY = "holiday",
+}
+
 export const holidayKeys = {
   all: ["holidays"] as const,
   countries: () => [...holidayKeys.all, "countries"] as const,
+  country: (countryId: string) =>
+    [...holidayKeys.countries(), countryId] as const,
+  holidays: (countryId: string) =>
+    [...holidayKeys.country(countryId), "holidays"] as const,
 };
 
 export const COUNTRY_FLAG_MAP: Record<string, CountryInfo> = {

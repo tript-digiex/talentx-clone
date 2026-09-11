@@ -16,7 +16,7 @@ export function AppSidebar() {
       <div className="flex h-full w-25 flex-col overflow-hidden rounded-4xl bg-white px-6 py-9 transition-[width] duration-300 ease-out group-hover:w-94">
         <div className="flex shrink-0 items-center gap-4">
           <img
-            src="/public/favicon-96x96.png"
+            src="/favicon-96x96.png"
             alt="logo"
             className="rounded-full h-10 w-10"
           />

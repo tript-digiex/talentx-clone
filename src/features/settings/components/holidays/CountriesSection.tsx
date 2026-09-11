@@ -1,22 +1,31 @@
 import Button from "@/components/ui/custom/Button";
 import { useEffect, useState } from "react";
-import { useCountryHoliday } from "../../hooks/holidays/useCountryHoliday";
 import { SpinnerLoader } from "@/components/common/SpinnerLoader";
 import { ErrorMessage } from "@/components/common/ErrorMessage";
-import { CountryListItem } from "./components/CountryListItem";
+import { SectionListItem } from "./components/SectionListItem";
 import { MODAL_MODE } from "@/constants/modal.constants";
 import { CountryFormModal } from "./components/CountryFormModal";
 import type { CountryData } from "../../types/holidays/holidays.types";
 import { DeleteCountryModal } from "./components/DeleteCountryModal";
+import { getCountryInfo } from "../../utils/setting.utils";
 
-export const CountriesSection = () => {
-  const {
-    countries,
-    isLoading: isCountriesLoading,
-    isError: isCountriesError,
-    errorMessage,
-  } = useCountryHoliday();
-  const [activeCountry, setActiveCountry] = useState("");
+export type CountriesSectionProps = {
+  countries: CountryData[];
+  isLoading: boolean;
+  isError: boolean;
+  errorMessage: string | undefined;
+  activeCountry: string;
+  setActiveCountry: (countryCode: string) => void;
+};
+
+export const CountriesSection = ({
+  countries,
+  isLoading,
+  isError,
+  errorMessage,
+  activeCountry,
+  setActiveCountry,
+}: CountriesSectionProps) => {
   const [modalMode, setModalMode] = useState<MODAL_MODE | null>(null);
   const [selectedCountry, setSelectedCountry] = useState<CountryData | null>(
     null,
@@ -66,15 +75,11 @@ export const CountriesSection = () => {
     }
   }, [countries, activeCountry]);
 
-  if (isCountriesLoading) {
-    return (
-      <div className="flex items-center justify-center w-full">
-        <SpinnerLoader />
-      </div>
-    );
+  if (isLoading) {
+    return <SpinnerLoader />;
   }
 
-  if (isCountriesError) {
+  if (isError) {
     return (
       <ErrorMessage errorMessage={errorMessage || "Error loading countries"} />
     );
@@ -94,10 +99,13 @@ export const CountriesSection = () => {
           </Button>
           <div className="flex-1">
             {countries.map((country) => (
-              <CountryListItem
+              <SectionListItem
                 key={country.country_code}
+                label={
+                  getCountryInfo(country.country_code)?.name ??
+                  country.country_code
+                }
                 active={activeCountry === country.country_code}
-                country={country}
                 onClick={() => setActiveCountry(country.country_code)}
                 onEdit={() => handleOpenEditCountryModal(country)}
                 onDelete={() => handleOpenDeleteConfirm(country)}
