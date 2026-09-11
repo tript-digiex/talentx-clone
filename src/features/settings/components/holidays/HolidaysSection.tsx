@@ -7,6 +7,7 @@ import Button from "@/components/ui/custom/Button";
 import { useState } from "react";
 import { MODAL_MODE } from "@/constants/modal.constants";
 import { HolidayFormModal } from "./components/HolidayFormModal";
+import type { HolidayData } from "../../types/holidays/holidays.types";
 
 type HolidaysSectionProps = {
   countryHolidayId: string;
@@ -16,10 +17,17 @@ export const HolidaysSection = ({ countryHolidayId }: HolidaysSectionProps) => {
   const { holidays, isLoading, isError, errorMessage } =
     useHolidaysByCountry(countryHolidayId);
   const [modalMode, setModalMode] = useState<MODAL_MODE | null>(null);
+  const [selectedHoliday, setSelectedHoliday] = useState<HolidayData | null>(null);
 
   const handleOpenAddHolidayModal = () => {
+    setSelectedHoliday(null);
     setModalMode(MODAL_MODE.ADD);
   };
+
+  const handleOpenEditHolidayModal = (holiday: HolidayData) => {
+    setSelectedHoliday(holiday);
+    setModalMode(MODAL_MODE.EDIT);
+  }
 
   const handleCloseHolidayModal = () => {
     setModalMode(null);
@@ -64,6 +72,7 @@ export const HolidaysSection = ({ countryHolidayId }: HolidaysSectionProps) => {
                     holiday.holiday_date,
                     holiday.description,
                   )}
+                  onEdit={() => handleOpenEditHolidayModal(holiday)}
                 />
               ))}
             </div>
@@ -75,7 +84,7 @@ export const HolidaysSection = ({ countryHolidayId }: HolidaysSectionProps) => {
         countryHolidayId={countryHolidayId}
         open={modalMode !== null}
         mode={modalMode}
-        holiday={null}
+        holiday={selectedHoliday}
         onOpenChange={(isOpen) => {
           if (!isOpen) {
             handleCloseHolidayModal();

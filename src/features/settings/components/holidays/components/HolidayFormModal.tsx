@@ -4,16 +4,17 @@ import DateSelect, {
   toDateSelectValue,
 } from "@/components/ui/custom/DateSelect";
 import Input from "@/components/ui/custom/Input";
-import type { MODAL_MODE } from "@/constants/modal.constants";
+import { MODAL_MODE } from "@/constants/modal.constants";
 import { useCreateHoliday } from "@/features/settings/hooks/holidays/useCreateHoliday";
-import { createHolidaySchema } from "@/features/settings/schemas/holidays.schemas";
+import { useUpdateHoliday } from "@/features/settings/hooks/holidays/useUpdateHoliday";
+import { holidaySchema } from "@/features/settings/schemas/holidays.schemas";
 import {
   DEFAULT_CREATE_HOLIDAY_FORM_VALUES,
   HOLIDAY_MODAL_MODE_CONFIG,
 } from "@/features/settings/types/holidays/holidays.constants";
 import type {
-  CreateHolidayPayload,
   HolidayData,
+  HolidayPayload,
 } from "@/features/settings/types/holidays/holidays.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
@@ -36,6 +37,7 @@ export const HolidayFormModal = ({
   onOpenChange,
 }: HolidayFormModalProps) => {
   const createHolidayMutation = useCreateHoliday();
+  const updateHolidayMutation = useUpdateHoliday();
 
   const {
     register,
@@ -43,8 +45,8 @@ export const HolidayFormModal = ({
     handleSubmit,
     reset,
     formState: { errors: createHolidayErrors },
-  } = useForm<CreateHolidayPayload>({
-    resolver: zodResolver(createHolidaySchema),
+  } = useForm<HolidayPayload>({
+    resolver: zodResolver(holidaySchema),
     defaultValues: DEFAULT_CREATE_HOLIDAY_FORM_VALUES,
     mode: "onSubmit",
   });
@@ -54,7 +56,29 @@ export const HolidayFormModal = ({
     reset(DEFAULT_CREATE_HOLIDAY_FORM_VALUES);
   };
 
-  const handleSubmitHoliday = (data: CreateHolidayPayload) => {
+  const handleSubmitHoliday = (data: HolidayPayload) => {
+    if (mode === MODAL_MODE.EDIT) {
+      if (!holiday?.id) {
+        toast.error("Holiday ID is required");
+        return;
+      }
+
+      updateHolidayMutation.mutate(
+        {
+          holidayId: holiday.id,
+          payload: data,
+        },
+        {
+          onSuccess: (response) => {
+            if (response.success) {
+              handleCloseModal();
+            }
+          },
+        },
+      );
+      return;
+    }
+
     createHolidayMutation.mutate(
       {
         ...data,

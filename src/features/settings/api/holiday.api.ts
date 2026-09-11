@@ -2,11 +2,12 @@ import { apiClient } from "@/lib/axios";
 import type {
   CountryResponse,
   CreateCountryHolidayPayload,
-  CreateHolidayPayload,
   CreateHolidayResponse,
   DeleteCountryHolidayResponse,
+  HolidayPayload,
   HolidayResponse,
   UpdateCountryHolidayPayload,
+  UpdateHolidayResponse,
 } from "../types/holidays/holidays.types";
 
 export const getCountryHoliday = async (): Promise<CountryResponse> => {
@@ -57,11 +58,25 @@ export const getHolidayByCountryId = async (
 };
 
 export const createHolidayApi = async (
-  payload: CreateHolidayPayload,
+  payload: HolidayPayload,
 ): Promise<CreateHolidayResponse> => {
   const response = await apiClient.post<CreateHolidayResponse>(
     "/v1/holiday",
     payload,
+  );
+  return response.data;
+};
+
+export const updateHolidayApi = async (
+  holidayId: string,
+  payload: HolidayPayload,
+): Promise<UpdateHolidayResponse> => {
+  const response = await apiClient.put<UpdateHolidayResponse>(
+    `/v1/holiday/${holidayId}`,
+    {
+      ...payload,
+      id: holidayId,
+    },
   );
   return response.data;
 };

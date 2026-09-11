@@ -1,32 +1,32 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateCountryHoliday } from "../../api/holiday.api";
 import type {
-  CountryResponse,
-  UpdateCountryHolidayPayload,
+    HolidayPayload,
+  UpdateHolidayResponse,
 } from "../../types/holidays/holidays.types";
+import { updateHolidayApi } from "../../api/holiday.api";
 import { toast } from "sonner";
 import { holidayKeys } from "../../types/holidays/holidays.constants";
 
-type UpdateCountryHolidayVariables = {
-  countryId: string;
-  payload: UpdateCountryHolidayPayload;
+type UpdateHolidayVariables = {
+  holidayId: string;
+  payload: HolidayPayload;
 };
 
-export const useUpdateCountryHoliday = () => {
+export const useUpdateHoliday = () => {
   const query = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ countryId, payload }: UpdateCountryHolidayVariables) =>
-      updateCountryHoliday(countryId, payload),
-    onSuccess: (response: CountryResponse) => {
+    mutationFn: ({ holidayId, payload }: UpdateHolidayVariables) =>
+      updateHolidayApi(holidayId, payload),
+    onSuccess: (response: UpdateHolidayResponse) => {
       if (!response.success) {
         toast.error(response.error.message);
         return;
       }
 
-      toast.success("Country holiday updated successfully");
+      toast.success("Holiday updated successfully");
       query.invalidateQueries({
-        queryKey: holidayKeys.countries(),
+        queryKey: holidayKeys.holidays(response.data.country_holiday_id),
       });
     },
     onError: (error: Error) => {

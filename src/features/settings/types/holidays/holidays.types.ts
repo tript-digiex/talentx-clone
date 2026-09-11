@@ -3,7 +3,7 @@ import type { COUNTRY_STATUS, HOLIDAY_STATUS } from "./holidays.constants";
 import type z from "zod";
 import type {
   createCountryHolidaySchema,
-  createHolidaySchema,
+  holidaySchema,
 } from "../../schemas/holidays.schemas";
 
 export type CountryData = {
@@ -39,8 +39,10 @@ export type HolidayData = {
 
 export type HolidayResponse = ApiResponse<HolidayData[]>;
 
-export type CreateHolidayPayload = z.infer<typeof createHolidaySchema>;
+export type HolidayPayload = z.infer<typeof holidaySchema>;
 
 export type CreateHolidayData = Omit<HolidayData, "updated_date">;
 
 export type CreateHolidayResponse = ApiResponse<CreateHolidayData>;
+
+export type UpdateHolidayResponse = ApiResponse<HolidayData>;

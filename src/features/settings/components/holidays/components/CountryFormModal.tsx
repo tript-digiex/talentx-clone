@@ -3,7 +3,8 @@ import Button from "@/components/ui/custom/Button";
 import Select from "@/components/ui/custom/Select";
 import { MODAL_MODE } from "@/constants/modal.constants";
 import { useCreateCountryHoliday } from "@/features/settings/hooks/holidays/useCreateCountryHoliday";
-import { useUpdateCountryHoliday } from "@/features/settings/hooks/holidays/useUpdateHoliday";
+import { useUpdateCountryHoliday } from "@/features/settings/hooks/holidays/useUpdateCountryHoliday";
+
 import { createCountryHolidaySchema } from "@/features/settings/schemas/holidays.schemas";
 import {
   COUNTRY_FLAG_MAP,
