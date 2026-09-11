@@ -8,7 +8,7 @@ import { createCountryHolidaySchema } from "@/features/settings/schemas/holidays
 import {
   COUNTRY_FLAG_MAP,
   COUNTRY_MODAL_MODE_CONFIG,
-  DEFAULT_CREATE_HOLIDAY_FORM_VALUES,
+  DEFAULT_CREATE_COUNTRY_FORM_VALUES,
 } from "@/features/settings/types/holidays/holidays.constants";
 import type {
   CountryData,
@@ -46,13 +46,13 @@ export const CountryFormModal = ({
     formState: { errors: createCountryError },
   } = useForm<CreateCountryHolidayPayload>({
     resolver: zodResolver(createCountryHolidaySchema),
-    defaultValues: DEFAULT_CREATE_HOLIDAY_FORM_VALUES,
+    defaultValues: DEFAULT_CREATE_COUNTRY_FORM_VALUES,
     mode: "onSubmit",
   });
 
   const handleCloseModal = () => {
     onOpenChange(false);
-    reset(DEFAULT_CREATE_HOLIDAY_FORM_VALUES);
+    reset(DEFAULT_CREATE_COUNTRY_FORM_VALUES);
   };
 
   const handleSubmitCountry = (data: CreateCountryHolidayPayload) => {

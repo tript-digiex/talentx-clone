@@ -75,6 +75,24 @@ export const COUNTRY_MODAL_MODE_CONFIG = {
   },
 } as const;
 
-export const DEFAULT_CREATE_HOLIDAY_FORM_VALUES = {
+export const DEFAULT_CREATE_COUNTRY_FORM_VALUES = {
   country_code: "",
+};
+
+export const HOLIDAY_MODAL_MODE_CONFIG = {
+  [MODAL_MODE.ADD]: {
+    title: "Add Holiday",
+    submitButton: "Add",
+  },
+
+  [MODAL_MODE.EDIT]: {
+    title: "Edit Holiday",
+    submitButton: "Save",
+  },
+} as const;
+
+export const DEFAULT_CREATE_HOLIDAY_FORM_VALUES = {
+  country_holiday_id: "",
+  holiday_date: "",
+  description: "",
 };

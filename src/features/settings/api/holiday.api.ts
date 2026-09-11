@@ -2,6 +2,8 @@ import { apiClient } from "@/lib/axios";
 import type {
   CountryResponse,
   CreateCountryHolidayPayload,
+  CreateHolidayPayload,
+  CreateHolidayResponse,
   DeleteCountryHolidayResponse,
   HolidayResponse,
   UpdateCountryHolidayPayload,
@@ -51,5 +53,15 @@ export const getHolidayByCountryId = async (
     },
   });
 
+  return response.data;
+};
+
+export const createHolidayApi = async (
+  payload: CreateHolidayPayload,
+): Promise<CreateHolidayResponse> => {
+  const response = await apiClient.post<CreateHolidayResponse>(
+    "/v1/holiday",
+    payload,
+  );
   return response.data;
 };

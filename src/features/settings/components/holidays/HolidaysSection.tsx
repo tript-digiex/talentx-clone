@@ -6,6 +6,7 @@ import { ErrorMessage } from "@/components/common/ErrorMessage";
 import Button from "@/components/ui/custom/Button";
 import { useState } from "react";
 import { MODAL_MODE } from "@/constants/modal.constants";
+import { HolidayFormModal } from "./components/HolidayFormModal";
 
 type HolidaysSectionProps = {
   countryHolidayId: string;
@@ -14,11 +15,15 @@ type HolidaysSectionProps = {
 export const HolidaysSection = ({ countryHolidayId }: HolidaysSectionProps) => {
   const { holidays, isLoading, isError, errorMessage } =
     useHolidaysByCountry(countryHolidayId);
-  // const [modalMode, setModalMode] = useState<MODAL_MODE | null>(null)
+  const [modalMode, setModalMode] = useState<MODAL_MODE | null>(null);
 
-  // const handleOpenAddHolidayModal = () => {
-  //   setModalMode(MODAL_MODE.ADD);
-  // }
+  const handleOpenAddHolidayModal = () => {
+    setModalMode(MODAL_MODE.ADD);
+  };
+
+  const handleCloseHolidayModal = () => {
+    setModalMode(null);
+  };
 
   if (!countryHolidayId) {
     return (
@@ -39,30 +44,44 @@ export const HolidaysSection = ({ countryHolidayId }: HolidaysSectionProps) => {
   }
 
   return (
-    <div className="flex-1 border rounded-md">
-      <div className="font-bold border-b px-4 py-2">Holidays</div>
-      <div className="px-4 p-2">
-        <Button
-          type="button"
-          className="font-normal p-4 my-2"
-          // onClick={handleOpenAddCountryModal}
-        >
-          Add Holiday
-        </Button>
-        {countryHolidayId && !isLoading && !isError && holidays.length > 0 ? (
-          <div className="flex-1">
-            {holidays.map((holiday) => (
-              <SectionListItem
-                key={holiday.id}
-                label={formatHoliday(
-                  holiday.date || holiday.holiday_date,
-                  holiday.description,
-                )}
-              />
-            ))}
-          </div>
-        ) : null}
+    <>
+      <div className="flex-1 border rounded-md">
+        <div className="font-bold border-b px-4 py-2">Holidays</div>
+        <div className="px-4 p-2">
+          <Button
+            type="button"
+            className="font-normal p-4 my-2"
+            onClick={handleOpenAddHolidayModal}
+          >
+            Add Holiday
+          </Button>
+          {countryHolidayId && !isLoading && !isError && holidays.length > 0 ? (
+            <div className="flex-1">
+              {holidays.map((holiday) => (
+                <SectionListItem
+                  key={holiday.id}
+                  label={formatHoliday(
+                    holiday.holiday_date,
+                    holiday.description,
+                  )}
+                />
+              ))}
+            </div>
+          ) : null}
+        </div>
       </div>
-    </div>
+
+      <HolidayFormModal
+        countryHolidayId={countryHolidayId}
+        open={modalMode !== null}
+        mode={modalMode}
+        holiday={null}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            handleCloseHolidayModal();
+          }
+        }}
+      />
+    </>
   );
 };
