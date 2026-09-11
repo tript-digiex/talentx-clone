@@ -26,10 +26,19 @@ export const CategorySection = ({
   setActiveCategoryId,
 }: CategorySectionProps) => {
   const [modalMode, setModalMode] = useState<MODAL_MODE | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<CategoryData | null>(
+    null,
+  );
 
   const handleOpenAddCountryModal = () => {
+    setSelectedCategory(null);
     setModalMode(MODAL_MODE.ADD);
-  }
+  };
+
+  const handleOpenEditCountryModal = (category: CategoryData) => {
+    setSelectedCategory(category);
+    setModalMode(MODAL_MODE.EDIT);
+  };
 
   useEffect(() => {
     if (categories.length > 0 && !activeCategoryId) {
@@ -61,6 +70,7 @@ export const CategorySection = ({
               label={category.name}
               active={activeCategoryId === category.id}
               onClick={() => setActiveCategoryId(category.id)}
+              onEdit={() => handleOpenEditCountryModal(category)}
             />
           ))}
         </div>
@@ -69,7 +79,7 @@ export const CategorySection = ({
       <CategoryFormModal
         open={modalMode !== null}
         mode={modalMode}
-        category={null}
+        category={selectedCategory}
         onOpenChange={(isOpen) => {
           if (!isOpen) {
             setModalMode(null);

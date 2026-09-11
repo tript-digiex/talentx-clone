@@ -6,7 +6,7 @@ export enum CATEGORY_STATUS {
 }
 
 export const categoryKeys = {
-    list: ["category"] as const,
+    list: ["categories"] as const,
 } as const;
 
 export const DEFAULT_CATEGORY_FORM_VALUES = {

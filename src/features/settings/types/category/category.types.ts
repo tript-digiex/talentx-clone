@@ -20,3 +20,5 @@ export type CategoryPayload = z.infer<typeof categorySchema>;
 export type CreateCategoryResponse = ApiResponse<
   Omit<CategoryData, "updated_date">
 >;
+
+export type UpdateCategoryResponse = ApiResponse<CategoryData>;
