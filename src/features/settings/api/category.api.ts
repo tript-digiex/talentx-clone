@@ -4,6 +4,7 @@ import type {
   CreateCategoryResponse,
   DeleteCategoryResponse,
   ListCategoryResponse,
+  ListSkillResponse,
   UpdateCategoryResponse,
 } from "../types/category/category.types";
 
@@ -38,6 +39,15 @@ export const deleteCategoryApi = async (
 ): Promise<DeleteCategoryResponse> => {
   const response = await apiClient.delete<DeleteCategoryResponse>(
     `/v1/category/${categoryId}`,
+  );
+  return response.data;
+};
+
+export const getSkillsByCategoryId = async (
+  categoryId: string,
+): Promise<ListSkillResponse> => {
+  const response = await apiClient.get<ListSkillResponse>(
+    `/v1/skill/category/${categoryId}/all`,
   );
   return response.data;
 };

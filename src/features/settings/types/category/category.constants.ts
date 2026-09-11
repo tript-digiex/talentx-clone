@@ -5,14 +5,21 @@ export enum CATEGORY_STATUS {
   INACTIVE = "inactive",
 }
 
+export enum SKILL_STATUS {
+  ACTIVE = "active",
+  INACTIVE = "inactive",
+}
+
 export const categoryKeys = {
-    list: ["categories"] as const,
+  list: ["categories"] as const,
+  skill: (categoryId: string) => [...categoryKeys.list, categoryId] as const,
+  skills: (categoryId: string) =>
+    [...categoryKeys.skill(categoryId), "skills"] as const,
 } as const;
 
 export const DEFAULT_CATEGORY_FORM_VALUES = {
   name: "",
 };
-
 
 export const CATEGORY_MODAL_MODE_CONFIG = {
   [MODAL_MODE.ADD]: {
