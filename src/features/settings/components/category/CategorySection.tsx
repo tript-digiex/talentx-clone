@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { CategoryFormModal } from "./components/CategoryFormModal";
 import { MODAL_MODE } from "@/constants/modal.constants";
 import { DeleteCategoryModal } from "./components/DeleteCategoryModal";
+import Input from "@/components/ui/custom/Input";
 
 type CategorySectionProps = {
   categories: CategoryData[];
@@ -31,6 +32,7 @@ export const CategorySection = ({
     null,
   );
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [searchCategoryName, setSearchCategoryName] = useState("");
 
 
   const handleOpenAddCountryModal = () => {
@@ -59,6 +61,14 @@ export const CategorySection = ({
     setIsDeleteConfirmOpen(false);
   };
 
+  const filteredCategories = searchCategoryName.trim()
+    ? categories.filter((category) =>
+      category.name
+        .toLowerCase()
+        .includes(searchCategoryName.trim().toLowerCase()),
+    )
+    : categories;
+
   useEffect(() => {
     if (categories.length > 0 && !activeCategoryId) {
       setActiveCategoryId(categories[0].id);
@@ -78,12 +88,21 @@ export const CategorySection = ({
   return (
     <>
       <SettingContainerSection title="Categories">
-        <Button type="button" className="font-normal p-4 my-2" onClick={handleOpenAddCountryModal}>
+        <div className="flex justify-between items-center">
+           <Input
+          type="search"
+          placeholder="Search by category name..."
+          value={searchCategoryName}
+          onChange={(e) => setSearchCategoryName(e.target.value)}
+        />
+          <Button type="button" className="font-normal p-4 my-2" onClick={handleOpenAddCountryModal}>
           Add Category
         </Button>
+       
+        </div>
 
         <div className="flex-1">
-          {categories.map((category) => (
+          {filteredCategories.map((category) => (
             <SettingSectionListItem
               key={category.id}
               label={category.name}
