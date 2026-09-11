@@ -2,12 +2,13 @@ import Button from "@/components/ui/custom/Button";
 import { useEffect, useState } from "react";
 import { SpinnerLoader } from "@/components/common/SpinnerLoader";
 import { ErrorMessage } from "@/components/common/ErrorMessage";
-import { SectionListItem } from "./components/SectionListItem";
 import { MODAL_MODE } from "@/constants/modal.constants";
 import { CountryFormModal } from "./components/CountryFormModal";
 import type { CountryData } from "../../types/holidays/holidays.types";
 import { DeleteCountryModal } from "./components/DeleteCountryModal";
 import { getCountryInfo } from "../../utils/setting.utils";
+import { SettingSectionListItem } from "@/components/common/SettingSectionListItem";
+import { SettingContainerSection } from "@/components/common/SettingContainerSection";
 
 export type CountriesSectionProps = {
   countries: CountryData[];
@@ -87,33 +88,30 @@ export const CountriesSection = ({
 
   return (
     <>
-      <div className="flex-1 border rounded-md">
-        <div className="font-bold border-b px-4 py-2">Countries</div>
-        <div className="px-4 p-2">
-          <Button
-            type="button"
-            className="font-normal p-4 my-2"
-            onClick={handleOpenAddCountryModal}
-          >
-            Add Country
-          </Button>
-          <div className="flex-1">
-            {countries.map((country) => (
-              <SectionListItem
-                key={country.country_code}
-                label={
-                  getCountryInfo(country.country_code)?.name ??
-                  country.country_code
-                }
-                active={activeCountry === country.country_code}
-                onClick={() => setActiveCountry(country.country_code)}
-                onEdit={() => handleOpenEditCountryModal(country)}
-                onDelete={() => handleOpenDeleteConfirm(country)}
-              />
-            ))}
-          </div>
+      <SettingContainerSection title="Countries">
+        <Button
+          type="button"
+          className="font-normal p-4 my-2"
+          onClick={handleOpenAddCountryModal}
+        >
+          Add Country
+        </Button>
+        <div className="flex-1">
+          {countries.map((country) => (
+            <SettingSectionListItem
+              key={country.country_code}
+              label={
+                getCountryInfo(country.country_code)?.name ??
+                country.country_code
+              }
+              active={activeCountry === country.country_code}
+              onClick={() => setActiveCountry(country.country_code)}
+              onEdit={() => handleOpenEditCountryModal(country)}
+              onDelete={() => handleOpenDeleteConfirm(country)}
+            />
+          ))}
         </div>
-      </div>
+      </SettingContainerSection>
 
       <CountryFormModal
         open={modalMode !== null}

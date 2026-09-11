@@ -1,6 +1,5 @@
 import { useHolidaysByCountry } from "../../hooks/holidays/useHolidaysByCountry";
 import { formatHoliday } from "../../utils/holiday.utils";
-import { SectionListItem } from "./components/SectionListItem";
 import { SpinnerLoader } from "@/components/common/SpinnerLoader";
 import { ErrorMessage } from "@/components/common/ErrorMessage";
 import Button from "@/components/ui/custom/Button";
@@ -9,6 +8,8 @@ import { MODAL_MODE } from "@/constants/modal.constants";
 import { HolidayFormModal } from "./components/HolidayFormModal";
 import type { HolidayData } from "../../types/holidays/holidays.types";
 import { DeleteHolidayModal } from "./components/DeleteHolidayModal";
+import { SettingSectionListItem } from "@/components/common/SettingSectionListItem";
+import { SettingContainerSection } from "@/components/common/SettingContainerSection";
 
 type HolidaysSectionProps = {
   countryHolidayId: string;
@@ -67,9 +68,7 @@ export const HolidaysSection = ({ countryHolidayId }: HolidaysSectionProps) => {
 
   return (
     <>
-      <div className="flex-1 border rounded-md">
-        <div className="font-bold border-b px-4 py-2">Holidays</div>
-        <div className="px-4 p-2">
+      <SettingContainerSection title="Holidays">
           <Button
             type="button"
             className="font-normal p-4 my-2"
@@ -80,7 +79,7 @@ export const HolidaysSection = ({ countryHolidayId }: HolidaysSectionProps) => {
           {countryHolidayId && !isLoading && !isError && holidays.length > 0 ? (
             <div className="flex-1">
               {holidays.map((holiday) => (
-                <SectionListItem
+                <SettingSectionListItem
                   key={holiday.id}
                   label={formatHoliday(
                     holiday.holiday_date,
@@ -92,8 +91,7 @@ export const HolidaysSection = ({ countryHolidayId }: HolidaysSectionProps) => {
               ))}
             </div>
           ) : null}
-        </div>
-      </div>
+      </SettingContainerSection>
 
       <HolidayFormModal
         countryHolidayId={countryHolidayId}
