@@ -4,7 +4,9 @@ import type { CategoryData } from "../../types/category/category.types";
 import { SettingSectionListItem } from "@/components/common/SettingSectionListItem";
 import { SpinnerLoader } from "@/components/common/SpinnerLoader";
 import { ErrorMessage } from "@/components/common/ErrorMessage";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { CategoryFormModal } from "./components/CategoryFormModal";
+import { MODAL_MODE } from "@/constants/modal.constants";
 
 type CategorySectionProps = {
   categories: CategoryData[];
@@ -23,6 +25,12 @@ export const CategorySection = ({
   activeCategoryId,
   setActiveCategoryId,
 }: CategorySectionProps) => {
+  const [modalMode, setModalMode] = useState<MODAL_MODE | null>(null);
+
+  const handleOpenAddCountryModal = () => {
+    setModalMode(MODAL_MODE.ADD);
+  }
+
   useEffect(() => {
     if (categories.length > 0 && !activeCategoryId) {
       setActiveCategoryId(categories[0].id);
@@ -42,7 +50,7 @@ export const CategorySection = ({
   return (
     <>
       <SettingContainerSection title="Categories">
-        <Button type="button" className="font-normal p-4 my-2">
+        <Button type="button" className="font-normal p-4 my-2" onClick={handleOpenAddCountryModal}>
           Add Category
         </Button>
 
@@ -57,6 +65,18 @@ export const CategorySection = ({
           ))}
         </div>
       </SettingContainerSection>
+
+      <CategoryFormModal
+        open={modalMode !== null}
+        mode={modalMode}
+        category={null}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            setModalMode(null);
+          }
+        }}
+        setActiveCategoryId={setActiveCategoryId}
+      />
     </>
   );
 };
