@@ -4,6 +4,7 @@ import type {
   CreateCountryHolidayPayload,
   CreateHolidayResponse,
   DeleteCountryHolidayResponse,
+  DeleteHolidayResponse,
   HolidayPayload,
   HolidayResponse,
   UpdateCountryHolidayPayload,
@@ -77,6 +78,15 @@ export const updateHolidayApi = async (
       ...payload,
       id: holidayId,
     },
+  );
+  return response.data;
+};
+
+export const deleteHolidayApi = async (
+  holidayId: string,
+): Promise<DeleteHolidayResponse> => {
+  const response = await apiClient.delete<DeleteHolidayResponse>(
+    `/v1/holiday/${holidayId}`,
   );
   return response.data;
 };

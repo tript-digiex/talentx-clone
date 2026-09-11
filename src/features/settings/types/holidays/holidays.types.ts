@@ -46,3 +46,5 @@ export type CreateHolidayData = Omit<HolidayData, "updated_date">;
 export type CreateHolidayResponse = ApiResponse<CreateHolidayData>;
 
 export type UpdateHolidayResponse = ApiResponse<HolidayData>;
+
+export type DeleteHolidayResponse = ApiResponse<string>;

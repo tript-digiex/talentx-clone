@@ -8,6 +8,7 @@ import { useState } from "react";
 import { MODAL_MODE } from "@/constants/modal.constants";
 import { HolidayFormModal } from "./components/HolidayFormModal";
 import type { HolidayData } from "../../types/holidays/holidays.types";
+import { DeleteHolidayModal } from "./components/DeleteHolidayModal";
 
 type HolidaysSectionProps = {
   countryHolidayId: string;
@@ -17,7 +18,10 @@ export const HolidaysSection = ({ countryHolidayId }: HolidaysSectionProps) => {
   const { holidays, isLoading, isError, errorMessage } =
     useHolidaysByCountry(countryHolidayId);
   const [modalMode, setModalMode] = useState<MODAL_MODE | null>(null);
-  const [selectedHoliday, setSelectedHoliday] = useState<HolidayData | null>(null);
+  const [selectedHoliday, setSelectedHoliday] = useState<HolidayData | null>(
+    null,
+  );
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
   const handleOpenAddHolidayModal = () => {
     setSelectedHoliday(null);
@@ -27,7 +31,17 @@ export const HolidaysSection = ({ countryHolidayId }: HolidaysSectionProps) => {
   const handleOpenEditHolidayModal = (holiday: HolidayData) => {
     setSelectedHoliday(holiday);
     setModalMode(MODAL_MODE.EDIT);
-  }
+  };
+
+  const handleOpenDeleteConfirm = (holiday: HolidayData) => {
+    setSelectedHoliday(holiday);
+    setIsDeleteConfirmOpen(true);
+  };
+
+  const handleCloseDeleteConfirm = () => {
+    setSelectedHoliday(null);
+    setIsDeleteConfirmOpen(false);
+  };
 
   const handleCloseHolidayModal = () => {
     setModalMode(null);
@@ -73,6 +87,7 @@ export const HolidaysSection = ({ countryHolidayId }: HolidaysSectionProps) => {
                     holiday.description,
                   )}
                   onEdit={() => handleOpenEditHolidayModal(holiday)}
+                  onDelete={() => handleOpenDeleteConfirm(holiday)}
                 />
               ))}
             </div>
@@ -90,6 +105,17 @@ export const HolidaysSection = ({ countryHolidayId }: HolidaysSectionProps) => {
             handleCloseHolidayModal();
           }
         }}
+      />
+
+      <DeleteHolidayModal
+        open={isDeleteConfirmOpen}
+        holidayId={selectedHoliday?.id}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            handleCloseDeleteConfirm();
+          }
+        }}
+        onDeleted={() => handleCloseDeleteConfirm()}
       />
     </>
   );
