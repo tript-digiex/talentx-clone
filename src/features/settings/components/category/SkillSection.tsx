@@ -4,10 +4,11 @@ import { SpinnerLoader } from "@/components/common/SpinnerLoader";
 import { ErrorMessage } from "@/components/common/ErrorMessage";
 import Button from "@/components/ui/custom/Button";
 import { MODAL_MODE } from "@/constants/modal.constants";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SettingSectionListItem } from "@/components/common/SettingSectionListItem";
 import type { SkillData } from "../../types/category/category.types";
 import { DeleteSkillModal } from "./components/DeleteSkillModal";
+import Input from "@/components/ui/custom/Input";
 
 type SkillSectionProps = {
   categoryId: string;
@@ -20,6 +21,7 @@ export const SkillSection = ({ categoryId }: SkillSectionProps) => {
     null,
   );
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [searchSkillName, setSearchSkillName] = useState("");
 
   const handleOpenAddHolidayModal = () => {
     setModalMode(MODAL_MODE.ADD);
@@ -34,6 +36,14 @@ export const SkillSection = ({ categoryId }: SkillSectionProps) => {
     setSelectedSkill(null);
     setIsDeleteConfirmOpen(false);
   };
+
+  const filteredSkills = searchSkillName.trim()
+    ? skills.filter((skill) =>
+      skill.name
+        .toLowerCase()
+        .includes(searchSkillName.trim().toLowerCase()),
+    )
+    : skills;
 
   if (!categoryId) {
     return (
@@ -56,16 +66,24 @@ export const SkillSection = ({ categoryId }: SkillSectionProps) => {
   return (
     <>
       <SettingContainerSection title="Items">
-        <Button
-          type="button"
-          className="font-normal p-4 my-2"
-          onClick={handleOpenAddHolidayModal}
-        >
-          Add Holiday
-        </Button>
-        {categoryId && !isLoading && !isError && skills.length > 0 ? (
+        <div className="flex justify-between items-center">
+          <Input
+            type="search"
+            placeholder="Search by skill name..."
+            value={searchSkillName}
+            onChange={(e) => setSearchSkillName(e.target.value)}
+          />
+          <Button
+            type="button"
+            className="font-normal p-4 my-2"
+            onClick={handleOpenAddHolidayModal}
+          >
+            Add Holiday
+          </Button>
+        </div>
+        {categoryId && !isLoading && !isError && filteredSkills.length > 0 ? (
           <div className="flex-1">
-            {skills.map((skill) => (
+            {filteredSkills.map((skill) => (
               <SettingSectionListItem
                 key={skill.id}
                 imageSrc={skill.icon}
